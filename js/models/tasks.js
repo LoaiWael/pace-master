@@ -4,33 +4,33 @@ class Task {
   #completed
   #completedDate
   constructor(dataObj) {
-    this.#id = dataObj.id;
+    this.#id = crypto.randomUUID();
     this.#name = dataObj.name;
-    this.#completed = dataObj.completed;
+    this.#completed = dataObj.completed || false;
     this.#completedDate = dataObj.completedDate;
   }
 
   // read only
-  getId() {
+  get id() {
     return this.#id;
   }
-  getName() {
+  get name() {
     return this.#name;
   }
-  isCompleted() {
+  get isCompleted() {
     return this.#completed;
   }
-  getCompleteDate() {
+  get getCompletedDate() {
     if (this.isCompleted())
       return this.#completedDate;
   }
 
   // write only
-  setName(newName) {
+  set name(newName) {
     this.#name = newName;
   }
-  complete() {
-    this.#completed = true;
+  set complete(complete = true) {
+    this.#completed = complete;
     this.#completedDate = new Date();
   }
 }
@@ -42,10 +42,10 @@ export class DailyTask extends Task {
     this.#time = dataObj.time;
   }
 
-  getTime() {
+  get time() {
     return this.#time;
   }
-  setTime(newTime) {
+  set time(newTime) {
     this.#time = newTime;
   }
 }
