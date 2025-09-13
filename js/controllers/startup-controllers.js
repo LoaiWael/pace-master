@@ -1,8 +1,9 @@
 import StartUp from "../views/startup-view.js";
 import Language from "../models/language.js";
 import { Profile, setNewProfile, profileObj } from "../models/personal-info.js";
+import dailyWork from "../models/daily-work.js";
 
-function checkDom() {
+function checkCurrentPage() {
   if (localStorage) {
     //code here later
   }
@@ -13,7 +14,7 @@ export function getDomByID(id = 1, animationType = 'in') {
   switch (id) {
     case 1: dom = `    
         <section class="fade-${animationType}-animation" id="startup-${id}">
-          <h1 class="startup-title">Welcome, to PlanIt</h1>
+          <h1 class="startup-title">Welcome, to PaceMaster</h1>
           <p class="startup-subtitle">Please select a language to continue</p>
           <div class="startup-select-wrapper">
             <select class="startup-select startup-select-js input-field">
@@ -78,7 +79,7 @@ export function getDomByID(id = 1, animationType = 'in') {
         <section class="fade-${animationType}-animation" id="startup-${id}">
           <h1 class="startup-title">Hi, Loai</h1>
           <div class="startup-description">
-            <p>PlanIt here helping you to organize your time by separating temporary tasks from your daily routine work</p>
+            <p>PaceMaster here helping you to organize your time by separating temporary tasks from your daily routine work</p>
             <p>We are also monitoring your daily work, pushing you to be better.</p>
           </div>
           <div class="startup-wireframes-row">
@@ -208,7 +209,7 @@ export function getDomByID(id = 1, animationType = 'in') {
             <p class="startup-subtitle">Once your daily data are collected, start recording it now !
             </p>
           </div>
-          <button class="startup-create-table-button">Create my table</button>
+          <button class="startup-create-table-button startup-create-table-button-js">Create my table</button>
         </section>
         <div class="control-buttons">
           <button type="button" class="startup-form-prev startup-form-prev-js">Previous</button>
@@ -296,4 +297,97 @@ export function insertLangValue() {
         option.setAttribute('selected', 'selected');
     });
   }
+}
+
+export function addNewDailyTask(targetDay) {
+  const tasksList = document.querySelector(`.task-list-${targetDay}-js`);
+
+  tasksList.insertAdjacentHTML('beforeend',
+    `
+    <div class="task-item new-task-item new-task-item-js">
+      <form class="new-task-form-js">
+        <div class="new-task-input">
+          <input type="text" class="input-field input-field-text-js" placeholder="Task name" name="taskName" required data-day="${targetDay}">
+          <input type="time" class="input-field input-field-time input-field-time-js" title="task time" name="taskTime"
+            required data-day="${targetDay}">
+        </div>
+        <button type="submit" class="task-save task-save-js" title="Save task" data-day="${targetDay}">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+            class="bi bi-calendar-check-fill" viewBox="0 0 16 16">
+            <path
+              d="M4 .5a.5.5 0 0 0-1 0V1H2a2 2 0 0 0-2 2v1h16V3a2 2 0 0 0-2-2h-1V.5a.5.5 0 0 0-1 0V1H4zM16 14V5H0v9a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2m-5.146-5.146-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 0 1 .708-.708L7.5 10.793l2.646-2.647a.5.5 0 0 1 .708.708" />
+          </svg> Save task
+        </button>
+        <button type="button" class="task-delete new-task-delete-js" title="Delete task" data-day="${targetDay}">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"
+              fill="currentColor" />
+          </svg>
+        </button>
+      </form>
+    </div>
+    `
+  );
+
+  document.querySelector('.new-task-form-js').addEventListener('submit', (e) => {
+    e.preventDefault();
+    saveTask(targetDay, tasksList);
+  });
+
+  cancelNewTask(targetDay, tasksList);
+}
+
+function cancelNewTask(targetDay, tasksList) {
+
+  const newTaskFormDel = document.querySelector('.new-task-delete-js');
+
+  if (newTaskFormDel) {
+    newTaskFormDel.addEventListener('click', () => {
+      const newTaskItem = document.querySelector('.new-task-item-js');
+      if (newTaskItem) {
+        newTaskItem.classList.add('delete-field');
+        setTimeout(() => {
+          tasksList.removeChild(newTaskItem);
+          document.querySelector(`.add-task-button-js[data-day="${targetDay}"]`).removeAttribute('disabled');
+        }, 350);
+      }
+    });
+  }
+}
+
+function saveTask(targetDay, tasksList) {
+  const nameInput = document.querySelector(`.input-field-text-js[data-day="${targetDay}"]`);
+  const timeInput = document.querySelector(`.input-field-time-js[data-day="${targetDay}"]`);
+
+  const taskData = {
+    name: nameInput.value.trim(),
+    time: timeInput.value
+  };
+
+  if (taskData.name.length < 2) {
+    alert('Task name must be at least 2 characters long');
+    return;
+  }
+
+  dailyWork.addTask(taskData, targetDay);
+
+  const newTaskItem = document.querySelector('.new-task-item-js');
+  tasksList.removeChild(newTaskItem);
+
+  document.querySelector(`.add-task-button-js[data-day="${targetDay}"]`).removeAttribute('disabled');
+
+  // tasksList.insertAdjacentHTML('beforeend',`
+  //   <div class="task-item">
+  //     <span class="task-text">${dailyWork[targetDay]}</span>
+  //     <div class="task-actions">
+  //       <span class="task-time">7:00 PM</span>
+  //       <button class="task-delete" title="Delete task">
+  //         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  //           <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"
+  //             fill="currentColor" />
+  //         </svg>
+  //       </button>
+  //     </div>
+  //   </div>
+  // `);
 }
