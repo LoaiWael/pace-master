@@ -1,4 +1,4 @@
-import { DailyTask } from "./tasks";
+import { DailyTask } from "./tasks.js";
 
 class DailyWork {
   saturday
@@ -19,44 +19,60 @@ class DailyWork {
     this.friday = dataObj.friday;
     this.weekend = dataObj.weekend;
 
-    localStorage.setItem('daily-work', JSON.stringify(dataObj));
+    this.#updateLocalStorage();
   }
 
   addTask(task, day) {
     const rightDay = this.#findDay(day);
     rightDay.push(new DailyTask(task));
 
+    this.#sortTasksByTime(rightDay);
     this.#updateLocalStorage();
   }
 
   removeTask(taskId, day) {
     const rightDay = this.#findDay(day);
-    rightDay.filter(task => task.getId() !== taskId);
+    rightDay.filter(task => task.id !== taskId);
 
     this.#updateLocalStorage();
   }
 
   editTask(taskId, day, newName, newTime) {
     const rightDay = this.#findDay(day);
-    const task = rightDay.find(taskItem => taskItem.getId() === taskId);
+    const task = rightDay.find(taskItem => taskItem.id === taskId);
 
-    task.setName(newName || task.getName());
-    task.setTime(newTime || task.getTime());
+    task.setName(newName || task.name);
+    task.setTime(newTime || task.name);
 
+    this.#sortTasksByTime(rightDay);
     this.#updateLocalStorage();
+  }
+
+  #dayToPlainObjects(day) {
+    return day?.map(task => this.#taskToPlainObject(task));
+  }
+
+  #taskToPlainObject(task) {
+    return {
+      id: task.id,
+      name: task.name,
+      completed: task.isCompleted,
+      completedDate: task.getCompleteDate,
+      time: task.time
+    };
   }
 
   #updateLocalStorage() {
     localStorage.setItem('daily-work', JSON.stringify(
       {
-        saturday: this.saturday,
-        sunday: this.sunday,
-        monday: this.monday,
-        tuesday: this.tuesday,
-        wednesday: this.wednesday,
-        thursday: this.thursday,
-        friday: this.friday,
-        weekend: this.weekend
+        saturday: this.#dayToPlainObjects(this.saturday),
+        sunday: this.#dayToPlainObjects(this.sunday),
+        monday: this.#dayToPlainObjects(this.monday),
+        tuesday: this.#dayToPlainObjects(this.tuesday),
+        wednesday: this.#dayToPlainObjects(this.wednesday),
+        thursday: this.#dayToPlainObjects(this.thursday),
+        friday: this.#dayToPlainObjects(this.friday),
+        weekend: this.#dayToPlainObjects(this.weekend)
       }
     ))
   }
@@ -81,4 +97,49 @@ class DailyWork {
     }
     return rightDay;
   }
+
+  #sortTasksByTime(day, ascending = true) {
+    function timeToMinutes(timeString) {
+      if (!timeString) return 0;
+
+      const [hours, minutes] = timeString.split(':').map(Number);
+      return hours * 60 + minutes;
+    }
+
+    day.sort((a, b) => {
+      const timeA = timeToMinutes(a.time);
+      const timeB = timeToMinutes(b.time);
+
+      return ascending ? timeA - timeB : timeB - timeA;
+    });
+  }
+}
+
+export default new DailyWork(loadFromLocalStorage() || {
+  saturday: [],
+  sunday: [],
+  monday: [],
+  tuesday: [],
+  wednesday: [],
+  thursday: [],
+  friday: [],
+  weekend: []
+});
+
+function loadFromLocalStorage() {
+  const saved = localStorage.getItem('daily-work');
+  if (!saved) return null;
+
+  const data = JSON.parse(saved);
+
+  return {
+    saturday: data.saturday?.map(obj => new DailyTask(obj)) || [],
+    sunday: data.sunday?.map(obj => new DailyTask(obj)) || [],
+    monday: data.monday?.map(obj => new DailyTask(obj)) || [],
+    tuesday: data.tuesday?.map(obj => new DailyTask(obj)) || [],
+    wednesday: data.wednesday?.map(obj => new DailyTask(obj)) || [],
+    thursday: data.thursday?.map(obj => new DailyTask(obj)) || [],
+    friday: data.friday?.map(obj => new DailyTask(obj)) || [],
+    weekend: data.weekend?.map(obj => new DailyTask(obj)) || []
+  };
 }
