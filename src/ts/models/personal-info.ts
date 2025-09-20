@@ -8,7 +8,7 @@ interface IProfile {
   gender: gender | null;
 }
 
-export class Profile {
+class Profile {
   private _firstName
   private _lastName
   //mentain age to birthdate later
@@ -78,7 +78,7 @@ export class Profile {
   }
 }
 
-export let profileObj = new Profile(localStorage.getItem('personal-data') ? JSON.parse(localStorage.getItem('personal-data') as string) : {
+let profileObj = new Profile(localStorage.getItem('personal-data') ? JSON.parse(localStorage.getItem('personal-data') as string) : {
   firstName: null,
   lastName: null,
   age: null,
@@ -86,6 +86,6 @@ export let profileObj = new Profile(localStorage.getItem('personal-data') ? JSON
   gender: null
 });
 
-export function setNewProfile(newProfile: IProfile) {
+export default function setNewProfile(newProfile: IProfile) {
   profileObj = new Profile(newProfile);
 }

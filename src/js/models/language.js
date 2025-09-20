@@ -1,6 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-class Language {
+export default class Language {
     #name;
     constructor(lang = 'en') {
         this.#name = lang;
@@ -11,4 +9,3 @@ class Language {
         localStorage.setItem('lang', this.#name);
     }
 }
-exports.default = Language;

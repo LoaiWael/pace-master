@@ -1,4 +1,4 @@
-import { continueButton, previousButton, getDomByID, checkFormValidation, insertFormValues, insertLangValue, addNewDailyTask } from "../controllers/startup-controllers";
+import { continueButton, previousButton, getDomByID, checkFormValidation, insertFormValues, insertLangValue, addNewDailyTask } from "../controllers/startup-controllers.js";
 
 interface IStartUp {
   id: number;
@@ -27,9 +27,9 @@ if (startupPageSection) {
 let currentPage = new StartUp(currentId, getDomByID(currentId, 'in'));
 
 function activeContinueButton(): void {
-  const continueButton = document.querySelector('.startup-continue-js');
-  if (continueButton)
-    continueButton.addEventListener('click', () => {
+  const continueButtonElement = document.querySelector('.startup-continue-js');
+  if (continueButtonElement)
+    continueButtonElement.addEventListener('click', () => {
 
       nextPageCheck(renderNextPage);
 
@@ -56,9 +56,9 @@ function activeContinueButton(): void {
 }
 
 function activePreviousButton(): void {
-  const previousButton = document.querySelector('.startup-form-prev-js');
-  if (previousButton)
-    previousButton.addEventListener('click', () => {
+  const previousButtonElement = document.querySelector('.startup-form-prev-js');
+  if (previousButtonElement)
+    previousButtonElement.addEventListener('click', () => {
 
       previousPageCheck(renderPreviousPage);
 
@@ -395,7 +395,7 @@ function renderDailyWork(): void {
   const addTaskButtons = document.querySelectorAll('.add-task-button-js') as NodeListOf<HTMLElement>;
   addTaskButtons.forEach(button => {
     button.addEventListener('click', () => {
-      addNewDailyTask(button.dataset.day);
+      addNewDailyTask(button.dataset.day as string);
       button.setAttribute('disabled', 'disabled');
     });
   });

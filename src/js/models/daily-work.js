@@ -1,6 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const tasks_js_1 = require("./tasks.js");
+import { DailyTask } from "./tasks.js";
 class DailyWork {
     saturday;
     sunday;
@@ -23,7 +21,7 @@ class DailyWork {
     }
     addTask(task, day) {
         const rightDay = this.#findDay(day);
-        rightDay.push(new tasks_js_1.DailyTask(task));
+        rightDay.push(new DailyTask(task));
         this.#sortTasksByTime(rightDay);
         this.#updateLocalStorage();
     }
@@ -105,7 +103,7 @@ class DailyWork {
         });
     }
 }
-exports.default = new DailyWork(loadFromLocalStorage() || {
+export default new DailyWork(loadFromLocalStorage() || {
     saturday: [],
     sunday: [],
     monday: [],
@@ -121,13 +119,13 @@ function loadFromLocalStorage() {
         return null;
     const data = JSON.parse(saved);
     return {
-        saturday: data.saturday?.map(obj => new tasks_js_1.DailyTask(obj)) || [],
-        sunday: data.sunday?.map(obj => new tasks_js_1.DailyTask(obj)) || [],
-        monday: data.monday?.map(obj => new tasks_js_1.DailyTask(obj)) || [],
-        tuesday: data.tuesday?.map(obj => new tasks_js_1.DailyTask(obj)) || [],
-        wednesday: data.wednesday?.map(obj => new tasks_js_1.DailyTask(obj)) || [],
-        thursday: data.thursday?.map(obj => new tasks_js_1.DailyTask(obj)) || [],
-        friday: data.friday?.map(obj => new tasks_js_1.DailyTask(obj)) || [],
-        weekend: data.weekend?.map(obj => new tasks_js_1.DailyTask(obj)) || []
+        saturday: data.saturday?.map(obj => new DailyTask(obj)) || [],
+        sunday: data.sunday?.map(obj => new DailyTask(obj)) || [],
+        monday: data.monday?.map(obj => new DailyTask(obj)) || [],
+        tuesday: data.tuesday?.map(obj => new DailyTask(obj)) || [],
+        wednesday: data.wednesday?.map(obj => new DailyTask(obj)) || [],
+        thursday: data.thursday?.map(obj => new DailyTask(obj)) || [],
+        friday: data.friday?.map(obj => new DailyTask(obj)) || [],
+        weekend: data.weekend?.map(obj => new DailyTask(obj)) || []
     };
 }

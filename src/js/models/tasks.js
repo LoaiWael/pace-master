@@ -1,6 +1,3 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.DailyTask = void 0;
 class Task {
     #id;
     #name;
@@ -35,7 +32,7 @@ class Task {
         this.#completedDate = new Date();
     }
 }
-class DailyTask extends Task {
+export class DailyTask extends Task {
     #time;
     constructor(dataObj) {
         super(dataObj);
@@ -48,4 +45,3 @@ class DailyTask extends Task {
         this.#time = newTime;
     }
 }
-exports.DailyTask = DailyTask;

@@ -1,72 +1,73 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.profileObj = exports.Profile = void 0;
-exports.setNewProfile = setNewProfile;
 class Profile {
-    #firstName;
-    #lastName;
+    _firstName;
+    _lastName;
     //mentain age to birthdate later
-    #age;
-    #email;
-    #gender;
+    _age;
+    _email;
+    _gender;
     constructor(info) {
-        this.#firstName = info.firstName;
-        this.#lastName = info.lastName;
-        this.#age = info.age;
-        this.#email = info.email;
-        this.#gender = info.gender;
+        this._firstName = info.firstName;
+        this._lastName = info.lastName;
+        this._age = info.age;
+        this._email = info.email;
+        this._gender = info.gender;
         this.#updateLocalStorage();
     }
     //read properties
-    getFname() {
-        return this.#firstName;
+    get firstName() {
+        return this._firstName;
     }
-    getLname() {
-        return this.#lastName;
+    get lastName() {
+        return this._lastName;
     }
-    getFullName() {
-        return this.#firstName + ' ' + this.#lastName;
+    get fullName() {
+        return this._firstName + ' ' + this._lastName;
     }
-    getAge() {
-        return this.#age;
+    get age() {
+        return this._age;
     }
-    getEmail() {
-        return this.#email;
+    get email() {
+        return this._email;
     }
-    getGender() {
-        return this.#gender;
+    get gender() {
+        return this._gender;
     }
     //set properties
-    updateFname(newName) {
-        this.#firstName = newName;
+    set firstName(newName) {
+        this._firstName = newName;
         this.#updateLocalStorage();
     }
-    updateLname(newName) {
-        this.#lastName = newName;
+    set lastName(newName) {
+        this._lastName = newName;
         this.#updateLocalStorage();
     }
     updateBirthDate() {
         //mentain later
     }
-    updateEmail(newEmail) {
-        this.#email = newEmail;
+    set email(newEmail) {
+        this._email = newEmail;
         this.#updateLocalStorage();
     }
     #updateLocalStorage() {
         localStorage.setItem('personal-data', JSON.stringify({
-            firstName: this.#firstName,
-            lastName: this.#lastName,
-            age: this.#age,
-            email: this.#email,
-            gender: this.#gender
+            firstName: this._firstName,
+            lastName: this._lastName,
+            age: this._age,
+            email: this._email,
+            gender: this._gender
         }));
     }
     deleteAcc() {
         localStorage.removeItem('personal-data');
     }
 }
-exports.Profile = Profile;
-exports.profileObj = new Profile(JSON.parse(localStorage.getItem('personal-data')) || {});
-function setNewProfile(newProfile) {
-    exports.profileObj = new Profile(newProfile);
+let profileObj = new Profile(localStorage.getItem('personal-data') ? JSON.parse(localStorage.getItem('personal-data')) : {
+    firstName: null,
+    lastName: null,
+    age: null,
+    email: null,
+    gender: null
+});
+export default function setNewProfile(newProfile) {
+    profileObj = new Profile(newProfile);
 }

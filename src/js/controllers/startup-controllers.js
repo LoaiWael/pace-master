@@ -1,25 +1,13 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.getDomByID = getDomByID;
-exports.continueButton = continueButton;
-exports.previousButton = previousButton;
-exports.checkFormValidation = checkFormValidation;
-exports.insertFormValues = insertFormValues;
-exports.insertLangValue = insertLangValue;
-exports.addNewDailyTask = addNewDailyTask;
-const startup_view_js_1 = __importDefault(require("../views/startup-view.js"));
-const language_js_1 = __importDefault(require("../models/language.js"));
-const personal_info_js_1 = require("../models/personal-info.js");
-const daily_work_js_1 = __importDefault(require("../models/daily-work.js"));
+import StartUp from "../views/startup-view.js";
+import Language from "../models/language.js";
+import setNewProfile from "../models/personal-info.js";
+import dailyWork from "../models/daily-work.js";
 function checkCurrentPage() {
     if (localStorage) {
         //code here later
     }
 }
-function getDomByID(id = 1, animationType = 'in') {
+export function getDomByID(id = 1, animationType = 'in') {
     let dom;
     switch (id) {
         case 1:
@@ -237,10 +225,10 @@ function getDomByID(id = 1, animationType = 'in') {
     }
     return dom;
 }
-function continueButton(currentId) {
+export function continueButton(currentId) {
     if (currentId === 1) {
-        const inputVal = document.querySelector('.startup-select').value;
-        new language_js_1.default(inputVal);
+        const inputVal = document.querySelector('.startup-select')?.value;
+        new Language(inputVal);
     }
     else if (currentId === 2) {
         const firstName = document.querySelector('.input-field-first-name-js');
@@ -249,50 +237,56 @@ function continueButton(currentId) {
         const age = document.querySelector('.input-field-age-js');
         //
         const email = document.querySelector('.input-field-email-js');
-        let gender;
+        if (!firstName || !lastName || !age || !email) {
+            return new StartUp(currentId, getDomByID(currentId, 'in'));
+        }
+        let gender = 'notsay';
         document.querySelectorAll('.gender-js').forEach(radio => {
             if (radio.checked)
-                gender = radio;
+                gender = radio.value;
         });
         ;
-        (0, personal_info_js_1.setNewProfile)({
+        setNewProfile({
             firstName: firstName.value,
             lastName: lastName.value,
-            age: age.value,
+            age: Number(age.value),
             email: email.value,
-            gender: gender.value
+            gender: gender
         });
     }
     else if (currentId === 4) {
-        return new startup_view_js_1.default(currentId, getDomByID(currentId, 'in'));
+        return new StartUp(currentId, getDomByID(currentId, 'in'));
     }
     const nextId = currentId + 1;
-    const nextStartUp = new startup_view_js_1.default(nextId, getDomByID(nextId, 'in'));
+    const nextStartUp = new StartUp(nextId, getDomByID(nextId, 'in'));
     return nextStartUp;
 }
-function previousButton(currentId) {
+export function previousButton(currentId) {
     const previousId = currentId - 1;
-    const previousStartUp = new startup_view_js_1.default(previousId, getDomByID(previousId, 'in'));
+    const previousStartUp = new StartUp(previousId, getDomByID(previousId, 'in'));
     return previousStartUp;
 }
-function checkFormValidation() {
+export function checkFormValidation() {
     const form = document.querySelector('.startup-form-js');
-    if (form.checkValidity()) {
-        return true;
-    }
-    else {
-        form.reportValidity();
-    }
+    if (form)
+        if (form.checkValidity()) {
+            return true;
+        }
+        else {
+            form.reportValidity();
+        }
+    return false;
 }
-function insertFormValues() {
+export function insertFormValues() {
     if (localStorage.getItem('personal-data')) {
         const info = JSON.parse(localStorage.getItem('personal-data'));
-        document.querySelector('.input-field-first-name-js').value = info.firstName;
-        document.querySelector('.input-field-last-name-js').value = info.lastName;
+        let fNameField = document.querySelector('.input-field-first-name-js').setAttribute('value', info.firstName);
+        let lNameField = document.querySelector('.input-field-last-name-js').setAttribute('value', info.lastName);
         //update later
-        document.querySelector('.input-field-age-js').value = info.age;
+        let ageField = document.querySelector('.input-field-age-js').setAttribute('value', info.age);
         //
-        document.querySelector('.input-field-email-js').value = info.email;
+        let emailField = document.querySelector('.input-field-email-js').setAttribute('value', info.email);
+        ;
         document.querySelectorAll('.gender-js').forEach(input => {
             if (info.gender === input.value) {
                 input.setAttribute('checked', 'checked');
@@ -300,7 +294,7 @@ function insertFormValues() {
         });
     }
 }
-function insertLangValue() {
+export function insertLangValue() {
     if (localStorage.getItem('lang')) {
         const choosenLang = localStorage.getItem('lang');
         document.querySelectorAll('.startup-select-js option').forEach(option => {
@@ -309,7 +303,7 @@ function insertLangValue() {
         });
     }
 }
-function addNewDailyTask(targetDay) {
+export function addNewDailyTask(targetDay) {
     const tasksList = document.querySelector(`.task-list-${targetDay}-js`);
     tasksList.insertAdjacentHTML('beforeend', `
     <div class="task-item new-task-item new-task-item-js">
@@ -335,7 +329,7 @@ function addNewDailyTask(targetDay) {
       </form>
     </div>
     `);
-    document.querySelector('.new-task-form-js').addEventListener('submit', (e) => {
+    document.querySelector('.new-task-form-js')?.addEventListener('submit', (e) => {
         e.preventDefault();
         saveTask(targetDay, tasksList);
     });
@@ -350,7 +344,7 @@ function cancelNewTask(targetDay, tasksList) {
                 newTaskItem.classList.add('delete-field');
                 setTimeout(() => {
                     tasksList.removeChild(newTaskItem);
-                    document.querySelector(`.add-task-button-js[data-day="${targetDay}"]`).removeAttribute('disabled');
+                    document.querySelector(`.add-task-button-js[data-day="${targetDay}"]`)?.removeAttribute('disabled');
                 }, 350);
             }
         });
@@ -367,10 +361,10 @@ function saveTask(targetDay, tasksList) {
         alert('Task name must be at least 2 characters long');
         return;
     }
-    daily_work_js_1.default.addTask(taskData, targetDay);
+    dailyWork.addTask(taskData, targetDay);
     const newTaskItem = document.querySelector('.new-task-item-js');
     tasksList.removeChild(newTaskItem);
-    document.querySelector(`.add-task-button-js[data-day="${targetDay}"]`).removeAttribute('disabled');
+    document.querySelector(`.add-task-button-js[data-day="${targetDay}"]`)?.removeAttribute('disabled');
     // tasksList.insertAdjacentHTML('beforeend',`
     //   <div class="task-item">
     //     <span class="task-text">${dailyWork[targetDay]}</span>

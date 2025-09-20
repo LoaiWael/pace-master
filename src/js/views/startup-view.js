@@ -1,7 +1,5 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const startup_controllers_1 = require("../controllers/startup-controllers");
-class StartUp {
+import { continueButton, previousButton, getDomByID, checkFormValidation, insertFormValues, insertLangValue, addNewDailyTask } from "../controllers/startup-controllers.js";
+export default class StartUp {
     id;
     dom;
     constructor(id, dom) {
@@ -9,7 +7,6 @@ class StartUp {
         this.dom = dom;
     }
 }
-exports.default = StartUp;
 let currentId = 1;
 const startupPageSection = document.querySelector('.startup-container-js section');
 if (startupPageSection) {
@@ -19,11 +16,11 @@ if (startupPageSection) {
         }
     });
 }
-let currentPage = new StartUp(currentId, (0, startup_controllers_1.getDomByID)(currentId, 'in'));
+let currentPage = new StartUp(currentId, getDomByID(currentId, 'in'));
 function activeContinueButton() {
-    const continueButton = document.querySelector('.startup-continue-js');
-    if (continueButton)
-        continueButton.addEventListener('click', () => {
+    const continueButtonElement = document.querySelector('.startup-continue-js');
+    if (continueButtonElement)
+        continueButtonElement.addEventListener('click', () => {
             nextPageCheck(renderNextPage);
             function renderNextPage() {
                 const startupContainer = document.querySelector('.startup-container-js');
@@ -46,9 +43,9 @@ function activeContinueButton() {
         });
 }
 function activePreviousButton() {
-    const previousButton = document.querySelector('.startup-form-prev-js');
-    if (previousButton)
-        previousButton.addEventListener('click', () => {
+    const previousButtonElement = document.querySelector('.startup-form-prev-js');
+    if (previousButtonElement)
+        previousButtonElement.addEventListener('click', () => {
             previousPageCheck(renderPreviousPage);
             function renderPreviousPage() {
                 const startupContainer = document.querySelector('.startup-container-js');
@@ -78,15 +75,15 @@ function activeStartUpButtons() {
 function nextPageCheck(renderPage) {
     if (currentPage.id === 1) {
         renderPage();
-        setTimeout(() => { (0, startup_controllers_1.insertFormValues)(); }, 350);
+        setTimeout(() => { insertFormValues(); }, 350);
     }
     else if (currentPage.id === 2) {
-        (0, startup_controllers_1.checkFormValidation)();
-        if ((0, startup_controllers_1.checkFormValidation)()) {
+        checkFormValidation();
+        if (checkFormValidation()) {
             renderPage();
         }
         else {
-            (0, startup_controllers_1.checkFormValidation)();
+            checkFormValidation();
         }
     }
     else if (currentPage.id === 3) {
@@ -100,11 +97,11 @@ function nextPageCheck(renderPage) {
 function previousPageCheck(renderPage) {
     if (currentPage.id === 3) {
         renderPage();
-        setTimeout(() => { (0, startup_controllers_1.insertFormValues)(); }, 350);
+        setTimeout(() => { insertFormValues(); }, 350);
     }
     else if (currentPage.id === 2) {
         renderPage();
-        setTimeout(() => { (0, startup_controllers_1.insertLangValue)(); }, 350);
+        setTimeout(() => { insertLangValue(); }, 350);
     }
     else {
         renderPage();
@@ -374,7 +371,7 @@ function renderDailyWork() {
     const addTaskButtons = document.querySelectorAll('.add-task-button-js');
     addTaskButtons.forEach(button => {
         button.addEventListener('click', () => {
-            (0, startup_controllers_1.addNewDailyTask)(button.dataset.day);
+            addNewDailyTask(button.dataset.day);
             button.setAttribute('disabled', 'disabled');
         });
     });

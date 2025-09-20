@@ -1,6 +1,6 @@
 import StartUp from "../views/startup-view.js";
 import Language from "../models/language.js";
-import { Profile, setNewProfile, profileObj } from "../models/personal-info.js";
+import setNewProfile from "../models/personal-info.js";
 import dailyWork from "../models/daily-work.js";
 
 function checkCurrentPage() {
@@ -234,6 +234,11 @@ export function continueButton(currentId: number): StartUp {
     const age = document.querySelector('.input-field-age-js') as HTMLInputElement;
     //
     const email = document.querySelector('.input-field-email-js') as HTMLInputElement;
+
+    if (!firstName || !lastName || !age || !email) {
+      return new StartUp(currentId, getDomByID(currentId, 'in'));
+    }
+
     let gender: string = 'notsay';
     document.querySelectorAll('.gender-js').forEach(radio => {
       if ((radio as HTMLInputElement).checked)
@@ -241,10 +246,10 @@ export function continueButton(currentId: number): StartUp {
     });;
 
     setNewProfile({
-      firstName: firstName?.value,
-      lastName: lastName?.value,
-      age: Number(age?.value),
-      email: email?.value,
+      firstName: firstName.value,
+      lastName: lastName.value,
+      age: Number(age.value),
+      email: email.value,
       gender: gender as any
     });
 
@@ -264,7 +269,7 @@ export function previousButton(currentId: number): StartUp {
   return previousStartUp;
 }
 
-export function checkFormValidation() {
+export function checkFormValidation(): boolean {
   const form = document.querySelector('.startup-form-js') as HTMLFormElement;
   if (form)
     if (form.checkValidity()) {
@@ -272,37 +277,42 @@ export function checkFormValidation() {
     } else {
       form.reportValidity();
     }
+  return false
 }
 
-export function insertFormValues() {
+export function insertFormValues(): void {
   if (localStorage.getItem('personal-data')) {
-    const info = JSON.parse(localStorage.getItem('personal-data'));
-    document.querySelector('.input-field-first-name-js').value = info.firstName;
-    document.querySelector('.input-field-last-name-js').value = info.lastName;
+    const info = JSON.parse(localStorage.getItem('personal-data') as string);
+
+    let fNameField = (document.querySelector('.input-field-first-name-js') as HTMLInputElement).setAttribute('value', info.firstName);
+
+    let lNameField = (document.querySelector('.input-field-last-name-js') as HTMLInputElement).setAttribute('value', info.lastName);
+
     //update later
-    document.querySelector('.input-field-age-js').value = info.age;
+    let ageField = (document.querySelector('.input-field-age-js') as HTMLInputElement).setAttribute('value', info.age);
     //
-    document.querySelector('.input-field-email-js').value = info.email;
+
+    let emailField = (document.querySelector('.input-field-email-js') as HTMLInputElement).setAttribute('value', info.email);;
     document.querySelectorAll('.gender-js').forEach(input => {
-      if (info.gender === input.value) {
+      if (info.gender === (input as HTMLInputElement).value) {
         input.setAttribute('checked', 'checked');
       }
     });
   }
 }
 
-export function insertLangValue() {
+export function insertLangValue(): void {
   if (localStorage.getItem('lang')) {
     const choosenLang = localStorage.getItem('lang');
     document.querySelectorAll('.startup-select-js option').forEach(option => {
-      if (option.value === choosenLang)
+      if ((option as HTMLInputElement).value === choosenLang)
         option.setAttribute('selected', 'selected');
     });
   }
 }
 
-export function addNewDailyTask(targetDay) {
-  const tasksList = document.querySelector(`.task-list-${targetDay}-js`);
+export function addNewDailyTask(targetDay: string): void {
+  const tasksList = document.querySelector(`.task-list-${targetDay}-js`) as Element;
 
   tasksList.insertAdjacentHTML('beforeend',
     `
@@ -331,7 +341,7 @@ export function addNewDailyTask(targetDay) {
     `
   );
 
-  document.querySelector('.new-task-form-js').addEventListener('submit', (e) => {
+  document.querySelector('.new-task-form-js')?.addEventListener('submit', (e) => {
     e.preventDefault();
     saveTask(targetDay, tasksList);
   });
@@ -339,7 +349,7 @@ export function addNewDailyTask(targetDay) {
   cancelNewTask(targetDay, tasksList);
 }
 
-function cancelNewTask(targetDay, tasksList) {
+function cancelNewTask(targetDay: string, tasksList: Element): void {
 
   const newTaskFormDel = document.querySelector('.new-task-delete-js');
 
@@ -350,16 +360,16 @@ function cancelNewTask(targetDay, tasksList) {
         newTaskItem.classList.add('delete-field');
         setTimeout(() => {
           tasksList.removeChild(newTaskItem);
-          document.querySelector(`.add-task-button-js[data-day="${targetDay}"]`).removeAttribute('disabled');
+          document.querySelector(`.add-task-button-js[data-day="${targetDay}"]`)?.removeAttribute('disabled');
         }, 350);
       }
     });
   }
 }
 
-function saveTask(targetDay, tasksList) {
-  const nameInput = document.querySelector(`.input-field-text-js[data-day="${targetDay}"]`);
-  const timeInput = document.querySelector(`.input-field-time-js[data-day="${targetDay}"]`);
+function saveTask(targetDay: string, tasksList: Element): void {
+  const nameInput = document.querySelector(`.input-field-text-js[data-day="${targetDay}"]`) as HTMLInputElement;
+  const timeInput = document.querySelector(`.input-field-time-js[data-day="${targetDay}"]`) as HTMLInputElement;
 
   const taskData = {
     name: nameInput.value.trim(),
@@ -374,9 +384,9 @@ function saveTask(targetDay, tasksList) {
   dailyWork.addTask(taskData, targetDay);
 
   const newTaskItem = document.querySelector('.new-task-item-js');
-  tasksList.removeChild(newTaskItem);
+  tasksList.removeChild(newTaskItem as Element);
 
-  document.querySelector(`.add-task-button-js[data-day="${targetDay}"]`).removeAttribute('disabled');
+  document.querySelector(`.add-task-button-js[data-day="${targetDay}"]`)?.removeAttribute('disabled');
 
   // tasksList.insertAdjacentHTML('beforeend',`
   //   <div class="task-item">
