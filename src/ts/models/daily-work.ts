@@ -1,6 +1,20 @@
+import type { IDailyTask } from "./tasks.js";
 import { DailyTask } from "./tasks.js";
 
-class DailyWork {
+export type dayNames = keyof IDailyWork;
+
+interface IDailyWork {
+  saturday: DailyTask[]
+  sunday: DailyTask[]
+  monday: DailyTask[]
+  tuesday: DailyTask[]
+  wednesday: DailyTask[]
+  thursday: DailyTask[]
+  friday: DailyTask[]
+  weekend: dayNames[]
+}
+
+class DailyWork implements IDailyWork {
   saturday
   sunday
   monday
@@ -9,7 +23,7 @@ class DailyWork {
   thursday
   friday
   weekend
-  constructor(dataObj) {
+  constructor(dataObj: IDailyWork) {
     this.saturday = dataObj.saturday;
     this.sunday = dataObj.sunday;
     this.monday = dataObj.monday;
@@ -19,65 +33,66 @@ class DailyWork {
     this.friday = dataObj.friday;
     this.weekend = dataObj.weekend;
 
-    this.#updateLocalStorage();
+    this.updateLocalStorage();
   }
 
-  addTask(task, day) {
-    const rightDay = this.#findDay(day);
+  addTask(task: IDailyTask, day: dayNames): void {
+    const rightDay = this.findDay(day) as DailyTask[];
     rightDay.push(new DailyTask(task));
 
-    this.#sortTasksByTime(rightDay);
-    this.#updateLocalStorage();
+    this.sortTasksByTime(rightDay);
+    this.updateLocalStorage();
   }
 
-  removeTask(taskId, day) {
-    const rightDay = this.#findDay(day);
+  removeTask(taskId: string, day: dayNames) {
+    const rightDay = this.findDay(day) as DailyTask[];
     rightDay.filter(task => task.id !== taskId);
 
-    this.#updateLocalStorage();
+    this.updateLocalStorage();
   }
 
-  editTask(taskId, day, newName, newTime) {
-    const rightDay = this.#findDay(day);
+  editTask(taskId: string, day: dayNames, newName: string, newTime: string) {
+    const rightDay = this.findDay(day) as DailyTask[];
     const task = rightDay.find(taskItem => taskItem.id === taskId);
+    if (task) {
+      task.name = newName || task.name;
+      task.time = newTime || task.name;
+    }
 
-    task.setName(newName || task.name);
-    task.setTime(newTime || task.name);
-
-    this.#sortTasksByTime(rightDay);
-    this.#updateLocalStorage();
+    this.sortTasksByTime(rightDay);
+    this.updateLocalStorage();
   }
 
-  #dayToPlainObjects(day) {
-    return day?.map(task => this.#taskToPlainObject(task));
+  private dayToPlainObjects(day: DailyTask[]): IDailyTask[] {
+    return day?.map(task => this.taskToPlainObject(task));
   }
 
-  #taskToPlainObject(task) {
+  private taskToPlainObject(task: DailyTask): IDailyTask {
     return {
       id: task.id,
       name: task.name,
       completed: task.isCompleted,
-      completedDate: task.getCompleteDate,
+      completedDate: task.getCompletedDate,
       time: task.time
     };
   }
 
-  #updateLocalStorage() {
+  private updateLocalStorage() {
     localStorage.setItem('daily-work', JSON.stringify(
       {
-        saturday: this.#dayToPlainObjects(this.saturday),
-        sunday: this.#dayToPlainObjects(this.sunday),
-        monday: this.#dayToPlainObjects(this.monday),
-        tuesday: this.#dayToPlainObjects(this.tuesday),
-        wednesday: this.#dayToPlainObjects(this.wednesday),
-        thursday: this.#dayToPlainObjects(this.thursday),
-        friday: this.#dayToPlainObjects(this.friday),
-        weekend: this.#dayToPlainObjects(this.weekend)
+        saturday: this.dayToPlainObjects(this.saturday),
+        sunday: this.dayToPlainObjects(this.sunday),
+        monday: this.dayToPlainObjects(this.monday),
+        tuesday: this.dayToPlainObjects(this.tuesday),
+        wednesday: this.dayToPlainObjects(this.wednesday),
+        thursday: this.dayToPlainObjects(this.thursday),
+        friday: this.dayToPlainObjects(this.friday),
+        weekend: this.weekend
       }
     ))
   }
 
-  #findDay(day) {
+  private findDay(day: dayNames): DailyTask[] {
     let rightDay;
     switch (day) {
       case 'saturday': rightDay = this.saturday;
@@ -95,15 +110,15 @@ class DailyWork {
       case 'friday': rightDay = this.friday;
         break;
     }
-    return rightDay;
+    return rightDay as DailyTask[];
   }
 
-  #sortTasksByTime(day, ascending = true) {
-    function timeToMinutes(timeString) {
+  private sortTasksByTime(day: DailyTask[], ascending = true): void {
+    function timeToMinutes(timeString: string) {
       if (!timeString) return 0;
 
       const [hours, minutes] = timeString.split(':').map(Number);
-      return hours * 60 + minutes;
+      return (hours as number) * 60 + (minutes as number);
     }
 
     day.sort((a, b) => {
@@ -115,7 +130,7 @@ class DailyWork {
   }
 }
 
-export default new DailyWork(loadFromLocalStorage() || {
+export const dailyWork = new DailyWork(loadFromLocalStorage() || {
   saturday: [],
   sunday: [],
   monday: [],
@@ -126,20 +141,20 @@ export default new DailyWork(loadFromLocalStorage() || {
   weekend: []
 });
 
-function loadFromLocalStorage() {
+function loadFromLocalStorage(): IDailyWork | null {
   const saved = localStorage.getItem('daily-work');
   if (!saved) return null;
 
   const data = JSON.parse(saved);
 
   return {
-    saturday: data.saturday?.map(obj => new DailyTask(obj)) || [],
-    sunday: data.sunday?.map(obj => new DailyTask(obj)) || [],
-    monday: data.monday?.map(obj => new DailyTask(obj)) || [],
-    tuesday: data.tuesday?.map(obj => new DailyTask(obj)) || [],
-    wednesday: data.wednesday?.map(obj => new DailyTask(obj)) || [],
-    thursday: data.thursday?.map(obj => new DailyTask(obj)) || [],
-    friday: data.friday?.map(obj => new DailyTask(obj)) || [],
-    weekend: data.weekend?.map(obj => new DailyTask(obj)) || []
+    saturday: data.saturday?.map((obj: IDailyTask) => new DailyTask(obj)) || [],
+    sunday: data.sunday?.map((obj: IDailyTask) => new DailyTask(obj)) || [],
+    monday: data.monday?.map((obj: IDailyTask) => new DailyTask(obj)) || [],
+    tuesday: data.tuesday?.map((obj: IDailyTask) => new DailyTask(obj)) || [],
+    wednesday: data.wednesday?.map((obj: IDailyTask) => new DailyTask(obj)) || [],
+    thursday: data.thursday?.map((obj: IDailyTask) => new DailyTask(obj)) || [],
+    friday: data.friday?.map((obj: IDailyTask) => new DailyTask(obj)) || [],
+    weekend: data.weekend?.map((obj: IDailyTask) => new DailyTask(obj)) || []
   };
 }
