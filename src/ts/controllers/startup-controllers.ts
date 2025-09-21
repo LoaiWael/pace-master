@@ -1,7 +1,10 @@
 import StartUp from "../views/startup-view.js";
-import Language from "../models/language.js";
-import setNewProfile from "../models/personal-info.js";
-import dailyWork from "../models/daily-work.js";
+import { Language } from "../models/language.js";
+import { setNewProfile } from "../models/personal-info.js";
+import { dailyWork } from "../models/daily-work.js";
+import type { language } from "../models/language.js";
+import type { gender } from "../models/personal-info.js";
+import type { dayNames } from "../models/daily-work.js";
 
 function checkCurrentPage() {
   if (localStorage) {
@@ -225,7 +228,7 @@ export function getDomByID(id: number = 1, animationType: fadeAnimation = 'in'):
 export function continueButton(currentId: number): StartUp {
   if (currentId === 1) {
     const inputVal = (document.querySelector('.startup-select') as HTMLInputElement)?.value;
-    new Language(inputVal);
+    new Language(inputVal as language);
   }
   else if (currentId === 2) {
     const firstName = document.querySelector('.input-field-first-name-js') as HTMLInputElement;
@@ -250,7 +253,7 @@ export function continueButton(currentId: number): StartUp {
       lastName: lastName.value,
       age: Number(age.value),
       email: email.value,
-      gender: gender as any
+      gender: gender as gender
     });
 
   }
@@ -311,7 +314,7 @@ export function insertLangValue(): void {
   }
 }
 
-export function addNewDailyTask(targetDay: string): void {
+export function addNewDailyTask(targetDay: dayNames): void {
   const tasksList = document.querySelector(`.task-list-${targetDay}-js`) as Element;
 
   tasksList.insertAdjacentHTML('beforeend',
@@ -367,13 +370,15 @@ function cancelNewTask(targetDay: string, tasksList: Element): void {
   }
 }
 
-function saveTask(targetDay: string, tasksList: Element): void {
+function saveTask(targetDay: dayNames, tasksList: Element): void {
   const nameInput = document.querySelector(`.input-field-text-js[data-day="${targetDay}"]`) as HTMLInputElement;
   const timeInput = document.querySelector(`.input-field-time-js[data-day="${targetDay}"]`) as HTMLInputElement;
 
   const taskData = {
     name: nameInput.value.trim(),
-    time: timeInput.value
+    time: timeInput.value,
+    completed: false,
+    completedDate: null
   };
 
   if (taskData.name.length < 2) {
