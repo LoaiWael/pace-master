@@ -1,4 +1,4 @@
-type gender = 'male' | 'female' | 'notsay';
+export type gender = 'male' | 'female' | 'notsay';
 
 interface IProfile {
   firstName: string | null;
@@ -86,6 +86,6 @@ let profileObj = new Profile(localStorage.getItem('personal-data') ? JSON.parse(
   gender: null
 });
 
-export default function setNewProfile(newProfile: IProfile) {
+export function setNewProfile(newProfile: IProfile) {
   profileObj = new Profile(newProfile);
 }
