@@ -1,4 +1,6 @@
 import { continueButton, previousButton, getDomByID, checkFormValidation, insertFormValues, insertLangValue, addNewDailyTask } from "../controllers/startup-controllers.js";
+import { Language } from "../models/language.js";
+import type { dayNames } from "../models/daily-work.js";
 
 interface IStartUp {
   id: number;
@@ -123,6 +125,7 @@ function previousPageCheck(renderPage: () => void): void {
   }
   else if (currentPage.id === 2) {
     renderPage();
+    console.log(Language.getCurrentLang);
     setTimeout(() => { insertLangValue(); }, 350);
   }
   else {
@@ -395,7 +398,7 @@ function renderDailyWork(): void {
   const addTaskButtons = document.querySelectorAll('.add-task-button-js') as NodeListOf<HTMLElement>;
   addTaskButtons.forEach(button => {
     button.addEventListener('click', () => {
-      addNewDailyTask(button.dataset.day as string);
+      addNewDailyTask(button.dataset.day as dayNames);
       button.setAttribute('disabled', 'disabled');
     });
   });
