@@ -1,4 +1,5 @@
 import { continueButton, previousButton, getDomByID, checkFormValidation, insertFormValues, insertLangValue, addNewDailyTask } from "../controllers/startup-controllers.js";
+import { Language } from "../models/language.js";
 export default class StartUp {
     id;
     dom;
@@ -101,6 +102,7 @@ function previousPageCheck(renderPage) {
     }
     else if (currentPage.id === 2) {
         renderPage();
+        console.log(Language.getCurrentLang);
         setTimeout(() => { insertLangValue(); }, 350);
     }
     else {

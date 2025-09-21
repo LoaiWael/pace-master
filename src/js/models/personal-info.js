@@ -68,6 +68,6 @@ let profileObj = new Profile(localStorage.getItem('personal-data') ? JSON.parse(
     email: null,
     gender: null
 });
-export default function setNewProfile(newProfile) {
+export function setNewProfile(newProfile) {
     profileObj = new Profile(newProfile);
 }

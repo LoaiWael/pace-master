@@ -1,7 +1,7 @@
 import StartUp from "../views/startup-view.js";
-import Language from "../models/language.js";
-import setNewProfile from "../models/personal-info.js";
-import dailyWork from "../models/daily-work.js";
+import { Language } from "../models/language.js";
+import { setNewProfile } from "../models/personal-info.js";
+import { dailyWork } from "../models/daily-work.js";
 function checkCurrentPage() {
     if (localStorage) {
         //code here later
@@ -355,7 +355,9 @@ function saveTask(targetDay, tasksList) {
     const timeInput = document.querySelector(`.input-field-time-js[data-day="${targetDay}"]`);
     const taskData = {
         name: nameInput.value.trim(),
-        time: timeInput.value
+        time: timeInput.value,
+        completed: false,
+        completedDate: null
     };
     if (taskData.name.length < 2) {
         alert('Task name must be at least 2 characters long');

@@ -1,47 +1,51 @@
 class Task {
-    #id;
-    #name;
-    #completed;
-    #completedDate;
+    _id;
+    _name;
+    _completed;
+    _completedDate;
     constructor(dataObj) {
-        this.#id = crypto.randomUUID();
-        this.#name = dataObj.name;
-        this.#completed = dataObj.completed || false;
-        this.#completedDate = dataObj.completedDate;
+        this._id = crypto.randomUUID();
+        this._name = dataObj.name;
+        this._completed = dataObj.completed || false;
+        this._completedDate = dataObj.completedDate;
     }
     // read only
     get id() {
-        return this.#id;
+        return this._id;
     }
     get name() {
-        return this.#name;
+        return this._name;
     }
     get isCompleted() {
-        return this.#completed;
+        return this._completed;
     }
     get getCompletedDate() {
-        if (this.isCompleted())
-            return this.#completedDate;
+        if (this.isCompleted) {
+            return this._completedDate;
+        }
+        else {
+            return null;
+        }
     }
     // write only
     set name(newName) {
-        this.#name = newName;
+        this._name = newName;
     }
-    set complete(complete = true) {
-        this.#completed = complete;
-        this.#completedDate = new Date();
+    set complete(complete) {
+        this._completed = complete;
+        this._completedDate = new Date();
     }
 }
 export class DailyTask extends Task {
-    #time;
+    _time;
     constructor(dataObj) {
         super(dataObj);
-        this.#time = dataObj.time;
+        this._time = dataObj.time;
     }
     get time() {
-        return this.#time;
+        return this._time;
     }
     set time(newTime) {
-        this.#time = newTime;
+        this._time = newTime;
     }
 }

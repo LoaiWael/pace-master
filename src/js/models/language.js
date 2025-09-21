@@ -1,11 +1,14 @@
-export default class Language {
-    #name;
+export class Language {
+    static _name;
     constructor(lang = 'en') {
-        this.#name = lang;
-        localStorage.setItem('lang', this.#name);
+        Language._name = lang;
+        localStorage.setItem('lang', Language._name);
     }
-    changeLang(newLang) {
-        this.#name = newLang;
-        localStorage.setItem('lang', this.#name);
+    static get getCurrentLang() {
+        return Language._name ?? localStorage.getItem('lang');
+    }
+    static set changeLang(newLang) {
+        Language._name = newLang;
+        localStorage.setItem('lang', Language._name);
     }
 }
