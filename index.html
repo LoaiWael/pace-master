@@ -22,24 +22,20 @@
     <img src="assets/custom-vectors/startup-vector-2.svg" class="startup-vector vector-2" alt="Background Vector 2">
   </div>
   <main class="startup-container startup-container-js">
-    <section class="fade-in-animation" id="startup-4">
-      <h1 class="startup-title">Getting started</h1>
-      <div class="startup-subtitles">
-        <p class="startup-subtitle">Before joining our experience, please start collecting your day to day work like
-          going
-          to work or school, studying, going to gymp and so on.</p>
-        <p class="startup-subtitle">You can only create two tables <br>first one is permanent and can be edited later
-          <br>second one is temporary like going on a summer vacation and need to record your days
-        </p>
-        <p class="startup-subtitle">But for now you need to initialize your main permanent table</p>
-        <p class="startup-subtitle">Once your daily data are collected, start recording it now !
-        </p>
+    <section class="fade-${animationType}-animation" id="startup-${id}">
+      <h1 class="startup-title">Welcome, to PaceMaster</h1>
+      <p class="startup-subtitle">Please select a language to continue</p>
+      <div class="startup-select-wrapper">
+        <select class="startup-select startup-select-js input-field">
+          <option value="en">English</option>
+          <option value="ar">Arabic</option>
+          <option value="fr">French</option>
+          <option value="de">German</option>
+        </select>
       </div>
-      <button class="startup-create-table-button startup-create-table-button-js">Create my table</button>
     </section>
     <div class="control-buttons">
-      <button type="button" class="startup-form-prev startup-form-prev-js">Previous</button>
-      <button type="submit" class="startup-continue startup-continue-js" disabled>Continue</button>
+      <button type="submit" class="startup-continue startup-continue-js">Continue</button>
     </div>
   </main>
 

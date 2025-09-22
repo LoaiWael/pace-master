@@ -1,5 +1,6 @@
 import { DailyTask } from "./tasks.js";
 class DailyWork {
+    static is12HourFormat;
     saturday;
     sunday;
     monday;
@@ -18,12 +19,16 @@ class DailyWork {
         this.friday = dataObj.friday;
         this.weekend = dataObj.weekend;
         this.updateLocalStorage();
+        DailyWork.is12HourFormat = DailyWork.findIf12Hour();
     }
     addTask(task, day) {
+        const newTask = new DailyTask(task);
         const rightDay = this.findDay(day);
-        rightDay.push(new DailyTask(task));
+        rightDay.push(newTask);
         this.sortTasksByTime(rightDay);
+        this.formatTime(newTask);
         this.updateLocalStorage();
+        return newTask;
     }
     removeTask(taskId, day) {
         const rightDay = this.findDay(day);
@@ -38,7 +43,9 @@ class DailyWork {
             task.time = newTime || task.name;
         }
         this.sortTasksByTime(rightDay);
+        this.formatTime(task);
         this.updateLocalStorage();
+        return task;
     }
     dayToPlainObjects(day) {
         return day?.map(task => this.taskToPlainObject(task));
@@ -103,6 +110,24 @@ class DailyWork {
             const timeB = timeToMinutes(b.time);
             return ascending ? timeA - timeB : timeB - timeA;
         });
+    }
+    static findIf12Hour() {
+        const formatter = new Intl.DateTimeFormat(navigator.language, {
+            hour: 'numeric'
+        });
+        const testDate = new Date(2023, 0, 1, 13, 0, 0);
+        const formattedTime = formatter.format(testDate);
+        // Check if the formatted time contains AM/PM indicators
+        const is12Hour = /AM|PM|am|pm/.test(formattedTime);
+        return is12Hour ? true : false;
+    }
+    formatTime(task) {
+        let [hours, min] = task.time.split(':');
+        const amOrPm = Number(hours) >= 12 ? 'PM' : 'AM';
+        if (DailyWork.is12HourFormat) {
+            hours = Number(hours) > 12 ? String(Number(hours) - 12) : hours;
+        }
+        task.time = `${hours}:${min} ${amOrPm}`;
     }
 }
 export const dailyWork = new DailyWork(loadFromLocalStorage() || {

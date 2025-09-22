@@ -125,7 +125,6 @@ function previousPageCheck(renderPage: () => void): void {
   }
   else if (currentPage.id === 2) {
     renderPage();
-    console.log(Language.getCurrentLang);
     setTimeout(() => { insertLangValue(); }, 350);
   }
   else {

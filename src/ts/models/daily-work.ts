@@ -15,6 +15,7 @@ interface IDailyWork {
 }
 
 class DailyWork implements IDailyWork {
+  private static is12HourFormat: boolean
   saturday
   sunday
   monday
@@ -34,14 +35,19 @@ class DailyWork implements IDailyWork {
     this.weekend = dataObj.weekend;
 
     this.updateLocalStorage();
+    DailyWork.is12HourFormat = DailyWork.findIf12Hour();
   }
 
-  addTask(task: IDailyTask, day: dayNames): void {
+  addTask(task: IDailyTask, day: dayNames): DailyTask {
+    const newTask = new DailyTask(task);
     const rightDay = this.findDay(day) as DailyTask[];
-    rightDay.push(new DailyTask(task));
+    rightDay.push(newTask);
 
     this.sortTasksByTime(rightDay);
+    this.formatTime(newTask);
     this.updateLocalStorage();
+
+    return newTask
   }
 
   removeTask(taskId: string, day: dayNames) {
@@ -51,7 +57,7 @@ class DailyWork implements IDailyWork {
     this.updateLocalStorage();
   }
 
-  editTask(taskId: string, day: dayNames, newName: string, newTime: string) {
+  editTask(taskId: string, day: dayNames, newName: string, newTime: string): DailyTask {
     const rightDay = this.findDay(day) as DailyTask[];
     const task = rightDay.find(taskItem => taskItem.id === taskId);
     if (task) {
@@ -60,7 +66,10 @@ class DailyWork implements IDailyWork {
     }
 
     this.sortTasksByTime(rightDay);
+    this.formatTime(task as DailyTask);
     this.updateLocalStorage();
+
+    return task as DailyTask;
   }
 
   private dayToPlainObjects(day: DailyTask[]): IDailyTask[] {
@@ -127,6 +136,31 @@ class DailyWork implements IDailyWork {
 
       return ascending ? timeA - timeB : timeB - timeA;
     });
+  }
+
+  private static findIf12Hour(): boolean {
+    const formatter = new Intl.DateTimeFormat(navigator.language, {
+      hour: 'numeric'
+    });
+
+    const testDate = new Date(2023, 0, 1, 13, 0, 0);
+    const formattedTime = formatter.format(testDate);
+
+    // Check if the formatted time contains AM/PM indicators
+    const is12Hour = /AM|PM|am|pm/.test(formattedTime);
+
+    return is12Hour ? true : false;
+  }
+
+  private formatTime(task: DailyTask): void {
+    let [hours, min] = task.time.split(':');
+    const amOrPm = Number(hours) >= 12 ? 'PM' : 'AM';
+
+    if (DailyWork.is12HourFormat) {
+      hours = Number(hours) > 12 ? String(Number(hours) - 12) : hours;
+    }
+
+    task.time = `${hours}:${min} ${amOrPm}`;
   }
 }
 
