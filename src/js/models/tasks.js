@@ -4,7 +4,7 @@ class Task {
     _completed;
     _completedDate;
     constructor(dataObj) {
-        this._id = crypto.randomUUID();
+        this._id = dataObj.id || crypto.randomUUID();
         this._name = dataObj.name;
         this._completed = dataObj.completed || false;
         this._completedDate = dataObj.completedDate;

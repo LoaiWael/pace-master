@@ -52,7 +52,13 @@ class DailyWork implements IDailyWork {
 
   removeTask(taskId: string, day: dayNames) {
     const rightDay = this.findDay(day) as DailyTask[];
-    rightDay.filter(task => task.id !== taskId);
+
+    for (let i = 0; i < rightDay.length; i++) {
+      if (rightDay[i]?.id === taskId) {
+        rightDay.splice(i, 1);
+        break;
+      }
+    }
 
     this.updateLocalStorage();
   }

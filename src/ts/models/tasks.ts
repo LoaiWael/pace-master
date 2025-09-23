@@ -11,7 +11,7 @@ abstract class Task {
   protected _completed: boolean
   protected _completedDate: Date | null
   constructor(dataObj: ITask) {
-    this._id = crypto.randomUUID();
+    this._id = dataObj.id || crypto.randomUUID();
     this._name = dataObj.name;
     this._completed = dataObj.completed || false;
     this._completedDate = dataObj.completedDate;

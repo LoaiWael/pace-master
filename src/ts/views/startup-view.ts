@@ -1,4 +1,4 @@
-import { continueButton, previousButton, getDomByID, checkFormValidation, insertFormValues, insertLangValue, addNewDailyTask } from "../controllers/startup-controllers.js";
+import { continueButton, previousButton, getDomByID, checkFormValidation, insertFormValues, insertLangValue, addNewDailyTask, deleteTask } from "../controllers/startup-controllers.js";
 import { Language } from "../models/language.js";
 import type { dayNames } from "../models/daily-work.js";
 
@@ -7,7 +7,7 @@ interface IStartUp {
   dom: string;
 }
 
-export default class StartUp implements IStartUp {
+export class StartUp implements IStartUp {
   public readonly id: number
   public readonly dom: string
   constructor(id: number, dom: string) {
@@ -162,42 +162,7 @@ function renderDailyWork(): void {
         <div class="day-card">
           <h2 class="day-card-title">Saturday</h2>
           <div class="task-list task-list-saturday-js">
-            <div class="task-item">
-              <span class="task-text">Working on my career</span>
-              <div class="task-actions">
-                <span class="task-time">2:00 PM</span>
-                <button class="task-delete" title="Delete task">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"
-                      fill="currentColor" />
-                  </svg>
-                </button>
-              </div>
-            </div>
-            <div class="task-item">
-              <span class="task-text">Going to the Gym</span>
-              <div class="task-actions">
-                <span class="task-time">7:00 PM</span>
-                <button class="task-delete" title="Delete task">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"
-                      fill="currentColor" />
-                  </svg>
-                </button>
-              </div>
-            </div>
-            <div class="task-item">
-              <span class="task-text">Studying for faculty</span>
-              <div class="task-actions">
-                <span class="task-time">9:30 PM</span>
-                <button class="task-delete" title="Delete task">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"
-                      fill="currentColor" />
-                  </svg>
-                </button>
-              </div>
-            </div>
+
           </div>
           <button class="add-task-button add-task-button-js" data-day="saturday">Add new</button>
         </div>
@@ -399,6 +364,17 @@ function renderDailyWork(): void {
     button.addEventListener('click', () => {
       addNewDailyTask(button.dataset.day as dayNames);
       button.setAttribute('disabled', 'disabled');
+    });
+  });
+  activateDeleteTaskButton();
+}
+
+export function activateDeleteTaskButton(): void {
+  const deleteButtons = document.querySelectorAll('.task-delete-js') as NodeListOf<HTMLButtonElement>;
+
+  deleteButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      deleteTask(button.dataset.taskId as string, button.dataset.day as dayNames);
     });
   });
 }
