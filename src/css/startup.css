@@ -390,27 +390,12 @@ body {
   }
 }
 
-.missing-input-field {
-  border: 2px solid var(--warning);
-  background-color: var(--warning-2);
-  position: relative;
-  display: inline-block;
-}
-
-.fade-in-animation {
-  animation: fade-in 350ms forwards;
-}
-
-.fade-out-animation {
-  animation: fade-out 350ms forwards;
-}
-
 /* --- Daily Work Page Styles --- */
 
 .overlay {
   position: fixed;
   inset: 0;
-  z-index: 5;
+  z-index: 7;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -434,7 +419,7 @@ body {
 .overlay-content {
   --overlay-content-padding: 3em;
   position: relative;
-  z-index: 4;
+  z-index: 5;
   width: 100%;
   max-width: 70em;
   max-height: 95vh;
@@ -536,6 +521,7 @@ body {
 
 .day-card-title {
   position: sticky;
+  z-index: 4;
   top: calc(-1 * var(--overlay-content-padding) + 0.6125em);
   font-size: 1.3rem;
   font-weight: 700;
@@ -687,7 +673,7 @@ body {
 
 .daily-work-close {
   position: fixed;
-  z-index: 4;
+  z-index: 6;
   margin-top: -2.25em;
   margin-right: -2em;
   align-self: flex-end;
@@ -834,24 +820,6 @@ body {
     to {
       scale: 1.5;
       opacity: 0.6;
-    }
-  }
-
-  @keyframes fade-out {
-    to {
-      height: 0;
-      opacity: 0;
-      transform: scale(0.95);
-      filter: blur(5px);
-    }
-  }
-
-  @keyframes fade-in {
-    from {
-      height: 0;
-      opacity: 0;
-      transform: scale(0.95);
-      filter: blur(5px);
     }
   }
 }

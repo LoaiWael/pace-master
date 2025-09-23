@@ -44,7 +44,6 @@ class DailyWork implements IDailyWork {
     rightDay.push(newTask);
 
     this.sortTasksByTime(rightDay);
-    this.formatTime(newTask);
     this.updateLocalStorage();
 
     return newTask
@@ -72,7 +71,6 @@ class DailyWork implements IDailyWork {
     }
 
     this.sortTasksByTime(rightDay);
-    this.formatTime(task as DailyTask);
     this.updateLocalStorage();
 
     return task as DailyTask;
@@ -158,15 +156,16 @@ class DailyWork implements IDailyWork {
     return is12Hour ? true : false;
   }
 
-  private formatTime(task: DailyTask): void {
+  public formatTimeAndDisplay(task: DailyTask): string {
     let [hours, min] = task.time.split(':');
     const amOrPm = Number(hours) >= 12 ? 'PM' : 'AM';
 
     if (DailyWork.is12HourFormat) {
-      hours = Number(hours) > 12 ? String(Number(hours) - 12) : hours;
+      const hourNum = Number(hours);
+      hours = hourNum === 0 ? '12' : hourNum > 12 ? String(hourNum - 12) : hours;
     }
 
-    task.time = `${hours}:${min} ${amOrPm}`;
+    return DailyWork.is12HourFormat ? `${hours}:${min} ${amOrPm}` : `${hours}:${min}`;
   }
 }
 

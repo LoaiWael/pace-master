@@ -1,5 +1,6 @@
 import { continueButton, previousButton, getDomByID, checkFormValidation, insertFormValues, insertLangValue, addNewDailyTask, deleteTask } from "../controllers/startup-controllers.js";
 import { Language } from "../models/language.js";
+import { dailyWork } from "../models/daily-work.js";
 export class StartUp {
     id;
     dom;
@@ -137,188 +138,64 @@ function renderDailyWork() {
         <!-- Saturday Card -->
         <div class="day-card">
           <h2 class="day-card-title">Saturday</h2>
-          <div class="task-list task-list-saturday-js">
-
+          <div class="task-list task-list-saturday-js fade-in-animation">
+            ${renderDayTasks('saturday')}
           </div>
-          <button class="add-task-button add-task-button-js" data-day="saturday">Add new</button>
+          <button class="add-task-button add-task-button-js" data-day="saturday">Add Task</button>
         </div>
 
         <!-- Sunday Card -->
         <div class="day-card">
           <h2 class="day-card-title">Sunday</h2>
-          <div class="task-list">
-            <div class="task-item">
-              <span class="task-text">Problem solving</span>
-              <div class="task-actions">
-                <span class="task-time">2:00 PM</span>
-                <button class="task-delete" title="Delete task">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"
-                      fill="currentColor" />
-                  </svg>
-                </button>
-              </div>
-            </div>
-            <div class="task-item">
-              <span class="task-text">Going to the Gym</span>
-              <div class="task-actions">
-                <span class="task-time">7:00 PM</span>
-                <button class="task-delete" title="Delete task">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"
-                      fill="currentColor" />
-                  </svg>
-                </button>
-              </div>
-            </div>
-            <div class="task-item">
-              <span class="task-text">Studying for faculty</span>
-              <div class="task-actions">
-                <span class="task-time">9:30 PM</span>
-                <button class="task-delete" title="Delete task">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"
-                      fill="currentColor" />
-                  </svg>
-                </button>
-              </div>
-            </div>
+          <div class="task-list task-list-sunday-js">
+            ${renderDayTasks('sunday')}
           </div>
-          <button class="add-task-button">Add new</button>
+          <button class="add-task-button add-task-button-js" data-day="sunday">Add Task</button>
         </div>
 
         <!-- Monday Card -->
         <div class="day-card">
           <h2 class="day-card-title">Monday</h2>
-          <div class="task-list">
-            <div class="task-item">
-              <span class="task-text">Working on my career</span>
-              <div class="task-actions">
-                <span class="task-time">2:00 PM</span>
-                <button class="task-delete" title="Delete task">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"
-                      fill="currentColor" />
-                  </svg>
-                </button>
-              </div>
-            </div>
-            <div class="task-item">
-              <span class="task-text">Washing the car</span>
-              <div class="task-actions">
-                <span class="task-time">6:00 PM</span>
-                <button class="task-delete" title="Delete task">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"
-                      fill="currentColor" />
-                  </svg>
-                </button>
-              </div>
-            </div>
-            <div class="task-item">
-              <span class="task-text">Chilling outside</span>
-              <div class="task-actions">
-                <span class="task-time">7:00 PM</span>
-                <button class="task-delete" title="Delete task">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"
-                      fill="currentColor" />
-                  </svg>
-                </button>
-              </div>
-            </div>
-            <div class="task-item">
-              <span class="task-text">Studying for faculty</span>
-              <div class="task-actions">
-                <span class="task-time">9:30 PM</span>
-                <button class="task-delete" title="Delete task">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"
-                      fill="currentColor" />
-                  </svg>
-                </button>
-              </div>
-            </div>
+          <div class="task-list task-list-monday-js">
+            ${renderDayTasks('monday')}
           </div>
-          <button class="add-task-button">Add new</button>
+          <button class="add-task-button add-task-button-js" data-day="monday">Add Task</button>
         </div>
 
         <!-- Tuesday Card -->
         <div class="day-card">
           <h2 class="day-card-title">Tuesday</h2>
-          <div class="task-list">
-            <div class="task-item">
-              <span class="task-text">Problem solving</span>
-              <div class="task-actions">
-                <span class="task-time">2:00 PM</span>
-                <button class="task-delete" title="Delete task">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"
-                      fill="currentColor" />
-                  </svg>
-                </button>
-              </div>
-            </div>
+          <div class="task-list task-list-tuesday-js">
+            ${renderDayTasks('tuesday')}
           </div>
-          <button class="add-task-button">Add new</button>
+          <button class="add-task-button add-task-button-js" data-day="tuesday">Add Task</button>
         </div>
 
         <!-- Wednesday Card -->
         <div class="day-card">
           <h2 class="day-card-title">Wednesday</h2>
-          <div class="task-list">
-            <div class="task-item">
-              <span class="task-text">Working on my career</span>
-              <div class="task-actions">
-                <span class="task-time">2:00 PM</span>
-                <button class="task-delete" title="Delete task">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"
-                      fill="currentColor" />
-                  </svg>
-                </button>
-              </div>
-            </div>
+          <div class="task-list task-list-wednesday-js">
+          ${renderDayTasks('wednesday')}
           </div>
-          <button class="add-task-button">Add new</button>
+          <button class="add-task-button add-task-button-js" data-day="wednesday">Add Task</button>
         </div>
 
-        <!-- Thursday Card (Active) -->
+        <!-- Thursday Card -->
         <div class="day-card active">
           <h2 class="day-card-title">Thursday</h2>
-          <div class="task-list">
-            <div class="task-item">
-              <span class="task-text">Problem solving</span>
-              <div class="task-actions">
-                <span class="task-time">2:00 PM</span>
-                <button class="task-delete" title="Delete task">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"
-                      fill="currentColor" />
-                  </svg>
-                </button>
-              </div>
-            </div>
+          <div class="task-list task-list-thursday-js">
+          ${renderDayTasks('thursday')}
           </div>
-          <button class="add-task-button">Add new</button>
+          <button class="add-task-button add-task-button-js" data-day="thursday">Add Task</button>
         </div>
+
+        <!-- Friday Card -->
         <div class="day-card active">
           <h2 class="day-card-title">Friday</h2>
-          <div class="task-list">
-            <div class="task-item">
-              <span class="task-text">Problem solving</span>
-              <div class="task-actions">
-                <span class="task-time">2:00 PM</span>
-                <button class="task-delete" title="Delete task">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"
-                      fill="currentColor" />
-                  </svg>
-                </button>
-              </div>
-            </div>
+          <div class="task-list task-list-friday-js">
+          ${renderDayTasks('friday')}
           </div>
-          <button class="add-task-button">Add new</button>
+          <button class="add-task-button add-task-button-js" data-day="friday">Add Task</button>
         </div>
       </div>
 
@@ -355,5 +232,47 @@ function activeCreateTableButton() {
     const createButton = document.querySelector('.startup-create-table-button-js');
     if (createButton)
         createButton.addEventListener('click', renderDailyWork);
+}
+function renderDayTasks(targetDay) {
+    const dayTasks = dailyWork[targetDay];
+    if (dayTasks) {
+        const dayTasksDom = dayTasks.map(task => `
+    <div class="task-item" id="${task.id}">
+      <span class="task-title">${task.name}</span>
+      <div class="task-actions">
+        <span class="task-time">${dailyWork.formatTimeAndDisplay(task)}</span>
+        <button class="task-delete task-delete-js" title="Delete task" data-task-id="${task.id}" data-day="${targetDay}">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"
+              fill="currentColor" />
+          </svg>
+        </button>
+      </div>
+    </div>
+    `).join('');
+        return dayTasksDom;
+    }
+    else {
+        return null;
+    }
+}
+export function reRenderTaskList(targetDay) {
+    const taskList = document.querySelector(`.task-list-${targetDay}-js`);
+    if (taskList) {
+        taskList.classList.remove('fade-in-animation');
+        const tasks = taskList.children;
+        for (let i = 0; i < tasks.length; i++) {
+            if (tasks[i]?.classList.contains('fade-in-animation')) {
+                tasks[i]?.classList.remove('fade-in-animation');
+            }
+            tasks[i]?.classList.add('fade-out-animation');
+        }
+        setTimeout(() => {
+            taskList.innerHTML = '';
+            taskList.classList.add('fade-in-animation');
+            taskList?.insertAdjacentHTML('beforeend', renderDayTasks(targetDay) || '');
+            activateDeleteTaskButton();
+        }, 360);
+    }
 }
 activeStartUpButtons();

@@ -1,4 +1,4 @@
-import { StartUp, activateDeleteTaskButton } from "../views/startup-view.js";
+import { StartUp, activateDeleteTaskButton, reRenderTaskList } from "../views/startup-view.js";
 import { Language } from "../models/language.js";
 import { setNewProfile } from "../models/personal-info.js";
 import { dailyWork } from "../models/daily-work.js";
@@ -397,7 +397,7 @@ function saveTask(targetDay: dayNames, tasksList: Element): void {
     <div class="task-item" id="${task.id}">
       <span class="task-title">${task.name}</span>
       <div class="task-actions">
-        <span class="task-time">${task.time}</span>
+        <span class="task-time">${dailyWork.formatTimeAndDisplay(task)}</span>
         <button class="task-delete task-delete-js" title="Delete task" data-task-id="${task.id}" data-day="${targetDay}">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"
@@ -408,7 +408,11 @@ function saveTask(targetDay: dayNames, tasksList: Element): void {
     </div>
   `);
 
-  activateDeleteTaskButton();
+  if (tasksList.children.length > 1) {
+    setTimeout(() => {
+      reRenderTaskList(targetDay);
+    }, 1000);
+  }
 }
 
 export function deleteTask(id: string, targetDay: dayNames): void {
