@@ -50,6 +50,36 @@ class DailyWork {
         this.updateLocalStorage();
         return task;
     }
+    updateWeekend(day, method) {
+        switch (method) {
+            case 'add':
+                if (dailyWork.availableWeekend) {
+                    this.weekend.push(day);
+                    this.updateLocalStorage();
+                    return true;
+                }
+                else {
+                    return false;
+                }
+            case "remove":
+                if (this.isWeekendEmpty) {
+                    return false;
+                }
+                else {
+                    const choosenday = this.weekend.indexOf(day);
+                    this.weekend.splice(choosenday, 1);
+                    this.updateLocalStorage();
+                    return true;
+                }
+        }
+        return false;
+    }
+    get isWeekendEmpty() {
+        return dailyWork.weekend.length === 0;
+    }
+    get availableWeekend() {
+        return dailyWork.weekend.length === 3 ? false : true;
+    }
     dayToPlainObjects(day) {
         return day?.map(task => this.taskToPlainObject(task));
     }
@@ -157,6 +187,6 @@ function loadFromLocalStorage() {
         wednesday: data.wednesday?.map((obj) => new DailyTask(obj)) || [],
         thursday: data.thursday?.map((obj) => new DailyTask(obj)) || [],
         friday: data.friday?.map((obj) => new DailyTask(obj)) || [],
-        weekend: data.weekend?.map((obj) => new DailyTask(obj)) || []
+        weekend: data.weekend || []
     };
 }

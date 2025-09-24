@@ -1,6 +1,6 @@
 import { StartUp, activateDeleteTaskButton, reRenderTaskList } from "../views/startup-view.js";
 import { Language } from "../models/language.js";
-import { setNewProfile } from "../models/personal-info.js";
+import { setNewProfile, profileObj } from "../models/personal-info.js";
 import { dailyWork } from "../models/daily-work.js";
 function checkCurrentPage() {
     if (localStorage) {
@@ -80,7 +80,7 @@ export function getDomByID(id = 1, animationType = 'in') {
         case 3:
             dom = `
         <section class="fade-${animationType}-animation" id="startup-${id}">
-          <h1 class="startup-title">Hi, Loai</h1>
+          <h1 class="startup-title">Hi, ${profileObj.firstName}</h1>
           <div class="startup-description">
             <p>PaceMaster here helping you to organize your time by separating temporary tasks from your daily routine work</p>
             <p>We are also monitoring your daily work, pushing you to be better.</p>
@@ -396,4 +396,27 @@ export function deleteTask(id, targetDay) {
             taskCard.remove();
         }, 350);
     }
+}
+export function chooseWeekend(day) {
+    const weekendButtons = document.querySelectorAll('.day-button-js');
+    weekendButtons.forEach(button => {
+        if (button.dataset.day == day) {
+            if (button.classList.contains('active')) {
+                if (dailyWork.updateWeekend(day, 'remove')) {
+                    button.classList.remove('active');
+                }
+                else {
+                    //overlay hint Empty days array
+                }
+            }
+            else {
+                if (dailyWork.updateWeekend(day, 'add')) {
+                    button.classList.add('active');
+                }
+                else {
+                    //overlay hint Max space
+                }
+            }
+        }
+    });
 }

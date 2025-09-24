@@ -76,6 +76,39 @@ class DailyWork implements IDailyWork {
     return task as DailyTask;
   }
 
+  updateWeekend(day: dayNames, method: 'add' | 'remove'): boolean {
+    switch (method) {
+      case 'add':
+        if (dailyWork.availableWeekend) {
+          this.weekend.push(day);
+          this.updateLocalStorage()
+          return true
+        }
+        else {
+          return false;
+        }
+      case "remove":
+        if (this.isWeekendEmpty) {
+          return false;
+        }
+        else {
+          const choosenday = this.weekend.indexOf(day);
+          this.weekend.splice(choosenday, 1);
+          this.updateLocalStorage();
+          return true;
+        }
+    }
+    return false
+  }
+
+  private get isWeekendEmpty() {
+    return dailyWork.weekend.length === 0
+  }
+
+  private get availableWeekend(): boolean {
+    return dailyWork.weekend.length === 3 ? false : true
+  }
+
   private dayToPlainObjects(day: DailyTask[]): IDailyTask[] {
     return day?.map(task => this.taskToPlainObject(task));
   }
@@ -194,6 +227,6 @@ function loadFromLocalStorage(): IDailyWork | null {
     wednesday: data.wednesday?.map((obj: IDailyTask) => new DailyTask(obj)) || [],
     thursday: data.thursday?.map((obj: IDailyTask) => new DailyTask(obj)) || [],
     friday: data.friday?.map((obj: IDailyTask) => new DailyTask(obj)) || [],
-    weekend: data.weekend?.map((obj: IDailyTask) => new DailyTask(obj)) || []
+    weekend: data.weekend || []
   };
 }

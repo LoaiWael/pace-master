@@ -1,5 +1,4 @@
-import { continueButton, previousButton, getDomByID, checkFormValidation, insertFormValues, insertLangValue, addNewDailyTask, deleteTask } from "../controllers/startup-controllers.js";
-import { Language } from "../models/language.js";
+import { continueButton, previousButton, getDomByID, checkFormValidation, insertFormValues, insertLangValue, addNewDailyTask, deleteTask, chooseWeekend } from "../controllers/startup-controllers.js";
 import { dailyWork } from "../models/daily-work.js";
 export class StartUp {
     id;
@@ -109,6 +108,12 @@ function previousPageCheck(renderPage) {
         renderPage();
     }
 }
+function activeCreateTableButton() {
+    const createButton = document.querySelector('.startup-create-table-button-js');
+    if (createButton) {
+        createButton.addEventListener('click', renderDailyWork);
+    }
+}
 function renderDailyWork() {
     const bodyDom = document.querySelector('body');
     if (bodyDom)
@@ -122,13 +127,13 @@ function renderDailyWork() {
         <div class="day-selector">
           <span class="day-selector-label">Weekend :</span>
           <div class="day-buttons">
-            <button class="day-button" data-day="saturday">Saturday</button>
-            <button class="day-button" data-day="sunday">Sunday</button>
-            <button class="day-button" data-day="monday">Monday</button>
-            <button class="day-button" data-day="tuesday">Tuesday</button>
-            <button class="day-button" data-day="wednesday">Wednesday</button>
-            <button class="day-button active" data-day="thursday">Thursday</button>
-            <button class="day-button active" data-day="friday">Friday</button>
+            <button class="day-button day-button-js" data-day="saturday">Saturday</button>
+            <button class="day-button day-button-js" data-day="sunday">Sunday</button>
+            <button class="day-button day-button-js" data-day="monday">Monday</button>
+            <button class="day-button day-button-js" data-day="tuesday">Tuesday</button>
+            <button class="day-button day-button-js" data-day="wednesday">Wednesday</button>
+            <button class="day-button day-button-js" data-day="thursday">Thursday</button>
+            <button class="day-button day-button-js" data-day="friday">Friday</button>
           </div>
         </div>
       </div>
@@ -136,7 +141,7 @@ function renderDailyWork() {
       <!-- Main Content Area -->
       <div class="daily-work-content">
         <!-- Saturday Card -->
-        <div class="day-card">
+        <div class="day-card day-card-saturday-js">
           <h2 class="day-card-title">Saturday</h2>
           <div class="task-list task-list-saturday-js fade-in-animation">
             ${renderDayTasks('saturday')}
@@ -145,7 +150,7 @@ function renderDailyWork() {
         </div>
 
         <!-- Sunday Card -->
-        <div class="day-card">
+        <div class="day-card day-card-sunday-js">
           <h2 class="day-card-title">Sunday</h2>
           <div class="task-list task-list-sunday-js">
             ${renderDayTasks('sunday')}
@@ -154,7 +159,7 @@ function renderDailyWork() {
         </div>
 
         <!-- Monday Card -->
-        <div class="day-card">
+        <div class="day-card day-card-monday-js">
           <h2 class="day-card-title">Monday</h2>
           <div class="task-list task-list-monday-js">
             ${renderDayTasks('monday')}
@@ -163,7 +168,7 @@ function renderDailyWork() {
         </div>
 
         <!-- Tuesday Card -->
-        <div class="day-card">
+        <div class="day-card day-card-tuesday-js">
           <h2 class="day-card-title">Tuesday</h2>
           <div class="task-list task-list-tuesday-js">
             ${renderDayTasks('tuesday')}
@@ -172,7 +177,7 @@ function renderDailyWork() {
         </div>
 
         <!-- Wednesday Card -->
-        <div class="day-card">
+        <div class="day-card day-card-wednesday-js">
           <h2 class="day-card-title">Wednesday</h2>
           <div class="task-list task-list-wednesday-js">
           ${renderDayTasks('wednesday')}
@@ -181,7 +186,7 @@ function renderDailyWork() {
         </div>
 
         <!-- Thursday Card -->
-        <div class="day-card active">
+        <div class="day-card day-card-thursday-js">
           <h2 class="day-card-title">Thursday</h2>
           <div class="task-list task-list-thursday-js">
           ${renderDayTasks('thursday')}
@@ -190,7 +195,7 @@ function renderDailyWork() {
         </div>
 
         <!-- Friday Card -->
-        <div class="day-card active">
+        <div class="day-card day-card-friday-js">
           <h2 class="day-card-title">Friday</h2>
           <div class="task-list task-list-friday-js">
           ${renderDayTasks('friday')}
@@ -211,6 +216,13 @@ function renderDailyWork() {
     </div>
   </section>
   `);
+    history.pushState(null, '', window.location.href);
+    renderWeekends();
+    activateAddTaskButtons();
+    activateDeleteTaskButton();
+    activateWeekendButtons();
+}
+function activateAddTaskButtons() {
     const addTaskButtons = document.querySelectorAll('.add-task-button-js');
     addTaskButtons.forEach(button => {
         button.addEventListener('click', () => {
@@ -218,7 +230,6 @@ function renderDailyWork() {
             button.setAttribute('disabled', 'disabled');
         });
     });
-    activateDeleteTaskButton();
 }
 export function activateDeleteTaskButton() {
     const deleteButtons = document.querySelectorAll('.task-delete-js');
@@ -227,11 +238,6 @@ export function activateDeleteTaskButton() {
             deleteTask(button.dataset.taskId, button.dataset.day);
         });
     });
-}
-function activeCreateTableButton() {
-    const createButton = document.querySelector('.startup-create-table-button-js');
-    if (createButton)
-        createButton.addEventListener('click', renderDailyWork);
 }
 function renderDayTasks(targetDay) {
     const dayTasks = dailyWork[targetDay];
@@ -274,5 +280,21 @@ export function reRenderTaskList(targetDay) {
             activateDeleteTaskButton();
         }, 360);
     }
+}
+function renderWeekends() {
+    const weekends = dailyWork.weekend;
+    const weekendButtons = document.querySelectorAll('.day-button-js');
+    for (let i = 0; i < weekendButtons.length; i++) {
+        weekends.forEach(day => {
+            if (day == weekendButtons[i]?.dataset.day)
+                weekendButtons[i]?.classList.add('active');
+        });
+    }
+}
+function activateWeekendButtons() {
+    const buttons = document.querySelectorAll('.day-button-js');
+    buttons.forEach(button => {
+        button.addEventListener('click', () => chooseWeekend(button.dataset.day));
+    });
 }
 activeStartUpButtons();

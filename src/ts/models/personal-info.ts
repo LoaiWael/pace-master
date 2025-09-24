@@ -17,13 +17,13 @@ class Profile {
   private _gender
 
   constructor(info: IProfile) {
-    this._firstName = info.firstName;
-    this._lastName = info.lastName;
+    this._firstName = this.capitalizeFirstLetter(info.firstName as string);
+    this._lastName = this.capitalizeFirstLetter(info.lastName as string);
     this._age = info.age;
     this._email = info.email;
     this._gender = info.gender;
 
-    this.#updateLocalStorage();
+    this.updateLocalStorage();
   }
 
   //read properties
@@ -49,21 +49,21 @@ class Profile {
   //set properties
   set firstName(newName: string) {
     this._firstName = newName;
-    this.#updateLocalStorage();
+    this.updateLocalStorage();
   }
   set lastName(newName: string) {
     this._lastName = newName;
-    this.#updateLocalStorage();
+    this.updateLocalStorage();
   }
   updateBirthDate() {
     //mentain later
   }
   set email(newEmail: string) {
     this._email = newEmail;
-    this.#updateLocalStorage();
+    this.updateLocalStorage();
   }
 
-  #updateLocalStorage() {
+  private updateLocalStorage() {
     localStorage.setItem('personal-data', JSON.stringify({
       firstName: this._firstName,
       lastName: this._lastName,
@@ -73,12 +73,16 @@ class Profile {
     }));
   }
 
+  private capitalizeFirstLetter(str: string): string {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  }
+
   deleteAcc() {
     localStorage.removeItem('personal-data');
   }
 }
 
-let profileObj = new Profile(localStorage.getItem('personal-data') ? JSON.parse(localStorage.getItem('personal-data') as string) : {
+export let profileObj = new Profile(localStorage.getItem('personal-data') ? JSON.parse(localStorage.getItem('personal-data') as string) : {
   firstName: null,
   lastName: null,
   age: null,
