@@ -2,11 +2,6 @@ import { StartUp, activateDeleteTaskButton, reRenderTaskList } from "../views/st
 import { Language } from "../models/language.js";
 import { setNewProfile, profileObj } from "../models/personal-info.js";
 import { dailyWork } from "../models/daily-work.js";
-function checkCurrentPage() {
-    if (localStorage) {
-        //code here later
-    }
-}
 export function getDomByID(id = 1, animationType = 'in') {
     let dom;
     switch (id) {
@@ -306,7 +301,7 @@ export function insertLangValue() {
 export function addNewDailyTask(targetDay) {
     const tasksList = document.querySelector(`.task-list-${targetDay}-js`);
     tasksList.insertAdjacentHTML('beforeend', `
-    <div class="task-item new-task-item new-task-item-js">
+    <div class="task-item new-task-item new-task-item-js" data-day="${targetDay}">
       <form class="new-task-form-js">
         <div class="new-task-input">
           <input type="text" class="input-field input-field-text-js" placeholder="Task name" name="taskName" required data-day="${targetDay}">
@@ -336,10 +331,10 @@ export function addNewDailyTask(targetDay) {
     cancelNewTask(targetDay);
 }
 function cancelNewTask(targetDay) {
-    const newTaskFormDel = document.querySelector('.new-task-delete-js');
+    const newTaskFormDel = document.querySelector(`.new-task-delete-js[data-day="${targetDay}"]`);
     if (newTaskFormDel) {
         newTaskFormDel.addEventListener('click', () => {
-            const newTaskItem = document.querySelector('.new-task-item-js');
+            const newTaskItem = document.querySelector(`.new-task-item-js[data-day="${targetDay}"]`);
             if (newTaskItem) {
                 newTaskItem.classList.add('delete-field');
                 setTimeout(() => {

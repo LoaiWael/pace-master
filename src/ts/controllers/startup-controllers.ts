@@ -6,12 +6,6 @@ import type { language } from "../models/language.js";
 import type { gender } from "../models/personal-info.js";
 import type { dayNames } from "../models/daily-work.js";
 
-function checkCurrentPage() {
-  if (localStorage) {
-    //code here later
-  }
-}
-
 type fadeAnimation = 'in' | 'out';
 
 export function getDomByID(id: number = 1, animationType: fadeAnimation = 'in'): string {
@@ -319,7 +313,7 @@ export function addNewDailyTask(targetDay: dayNames): void {
 
   tasksList.insertAdjacentHTML('beforeend',
     `
-    <div class="task-item new-task-item new-task-item-js">
+    <div class="task-item new-task-item new-task-item-js" data-day="${targetDay}">
       <form class="new-task-form-js">
         <div class="new-task-input">
           <input type="text" class="input-field input-field-text-js" placeholder="Task name" name="taskName" required data-day="${targetDay}">
@@ -354,11 +348,11 @@ export function addNewDailyTask(targetDay: dayNames): void {
 
 function cancelNewTask(targetDay: string): void {
 
-  const newTaskFormDel = document.querySelector('.new-task-delete-js');
+  const newTaskFormDel = document.querySelector(`.new-task-delete-js[data-day="${targetDay}"]`);
 
   if (newTaskFormDel) {
     newTaskFormDel.addEventListener('click', () => {
-      const newTaskItem = document.querySelector('.new-task-item-js');
+      const newTaskItem = document.querySelector(`.new-task-item-js[data-day="${targetDay}"]`);
       if (newTaskItem) {
         newTaskItem.classList.add('delete-field');
         setTimeout(() => {
@@ -449,3 +443,5 @@ export function chooseWeekend(day: dayNames): void {
     }
   });
 }
+
+//save button - overlay hint - generating dom

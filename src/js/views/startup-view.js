@@ -8,6 +8,11 @@ export class StartUp {
         this.dom = dom;
     }
 }
+function checkCurrentPage() {
+    if (localStorage) {
+        //code here later
+    }
+}
 let currentId = 1;
 const startupPageSection = document.querySelector('.startup-container-js section');
 if (startupPageSection) {
@@ -118,9 +123,9 @@ function renderDailyWork() {
     const bodyDom = document.querySelector('body');
     if (bodyDom)
         bodyDom.insertAdjacentHTML('beforeend', `
-    <section class="overlay">
-    <div class="overlay-backdrop"></div>
-    <div class="overlay-content">
+    <section class="overlay overlay-js">
+    <div class="overlay-backdrop overlay-backdrop-js"></div>
+    <div class="overlay-content overlay-content-js">
       <!-- Header Section -->
       <div class="daily-work-header">
         <h1 class="daily-work-title">Daily work</h1>
@@ -205,7 +210,7 @@ function renderDailyWork() {
       </div>
 
       <!-- Close Button -->
-      <button class="daily-work-close" title="Close">
+      <button class="daily-work-close daily-work-close-js" title="Close">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path
             d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"
@@ -221,6 +226,7 @@ function renderDailyWork() {
     activateAddTaskButtons();
     activateDeleteTaskButton();
     activateWeekendButtons();
+    avtivateCloseOverlayButtons();
 }
 function activateAddTaskButtons() {
     const addTaskButtons = document.querySelectorAll('.add-task-button-js');
@@ -296,5 +302,23 @@ function activateWeekendButtons() {
     buttons.forEach(button => {
         button.addEventListener('click', () => chooseWeekend(button.dataset.day));
     });
+}
+function avtivateCloseOverlayButtons() {
+    const closeButton = document.querySelector('.daily-work-close-js');
+    const backdrop = document.querySelector('.overlay-backdrop-js');
+    closeButton?.addEventListener('click', closeOverlay);
+    backdrop?.addEventListener('click', closeOverlay);
+    window.addEventListener('popstate', closeOverlay);
+}
+function closeOverlay() {
+    const overlay = document.querySelector('.overlay-js');
+    const overlayBackDrop = document.querySelector('.overlay-backdrop-js');
+    const overlayContent = document.querySelector('.overlay-content-js');
+    history.back();
+    overlayContent.classList.add('fade-out-animation');
+    overlayBackDrop.style.opacity = '0';
+    setTimeout(() => {
+        overlay.remove();
+    }, 350);
 }
 activeStartUpButtons();
