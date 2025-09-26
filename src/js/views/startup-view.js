@@ -315,7 +315,7 @@ function closeOverlay() {
     const overlayBackDrop = document.querySelector('.overlay-backdrop-js');
     const overlayContent = document.querySelector('.overlay-content-js');
     history.back();
-    overlayContent.classList.add('fade-out-animation');
+    overlayContent.classList.add('fade-out-fixed-height-animation');
     overlayBackDrop.style.opacity = '0';
     setTimeout(() => {
         overlay.remove();

@@ -359,7 +359,7 @@ function closeOverlay(): void {
 
   history.back();
 
-  overlayContent.classList.add('fade-out-animation');
+  overlayContent.classList.add('fade-out-fixed-height-animation');
   overlayBackDrop.style.opacity = '0';
   setTimeout(() => {
     overlay.remove();

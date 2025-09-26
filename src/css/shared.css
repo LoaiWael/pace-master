@@ -105,6 +105,14 @@ button {
   animation: fade-out 350ms forwards;
 }
 
+.fade-in-fixed-height-animation {
+  animation: fade-in-fixed-height 350ms forwards;
+}
+
+.fade-out-fixed-height-animation {
+  animation: fade-out-fixed-height 350ms forwards;
+}
+
 @media (prefers-reduced-motion: no-preference) {
 
   @keyframes fade-out {
@@ -122,6 +130,22 @@ button {
       opacity: 0;
       transform: scale(0.95);
       filter: blur(5px);
+    }
+  }
+
+  @keyframes fade-out-fixed-height {
+    to {
+      transform: scale(0.95);
+      filter: blur(5px);
+      opacity: 0;
+    }
+  }
+
+  @keyframes fade-in-fixed-height {
+    from {
+      transform: scale(0.95);
+      filter: blur(5px);
+      opacity: 0;
     }
   }
 }
