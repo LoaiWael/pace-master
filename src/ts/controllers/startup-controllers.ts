@@ -19,8 +19,6 @@ export function getDomByID(id: number = 1, animationType: fadeAnimation = 'in'):
             <select class="startup-select startup-select-js input-field">
               <option value="en">English</option>
               <option value="ar">Arabic</option>
-              <option value="fr">French</option>
-              <option value="de">German</option>
             </select>
           </div>
         </section>

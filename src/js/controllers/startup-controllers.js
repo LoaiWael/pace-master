@@ -14,8 +14,6 @@ export function getDomByID(id = 1, animationType = 'in') {
             <select class="startup-select startup-select-js input-field">
               <option value="en">English</option>
               <option value="ar">Arabic</option>
-              <option value="fr">French</option>
-              <option value="de">German</option>
             </select>
           </div>
         </section>
@@ -415,3 +413,4 @@ export function chooseWeekend(day) {
         }
     });
 }
+//save button - overlay hint - generating dom
