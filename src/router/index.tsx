@@ -18,7 +18,7 @@ export default createBrowserRouter([
         element: <ProtectedRoutes />,
         children: [
           { path: 'analytics', element: <AnalyticsPage /> },
-          { path: 'dailyWork', element: <DailyWorkPage /> },
+          { path: 'dailywork', element: <DailyWorkPage /> },
           { path: 'todo', element: <ToDoListPage /> }
         ]
       }
