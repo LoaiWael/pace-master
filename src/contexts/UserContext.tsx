@@ -1,15 +1,5 @@
-import { createContext, useContext, useReducer, useState, type ActionDispatch, type ReactNode } from "react"
-
-type Gender = 'male' | 'female' | 'unknown';
-
-interface Iuser {
-  isAuth: boolean
-  fName: string
-  lName: string
-  age: number
-  email: string
-  gender: Gender
-}
+import { createContext, use, useEffect, useReducer, type ActionDispatch, type ReactNode } from "react"
+import type { Gender, IdailyWork, Iuser } from "@/types";
 
 const localStorageData = localStorage.getItem('user-data');
 
@@ -19,17 +9,27 @@ const initialState = localStorageData ? JSON.parse(localStorageData) : {
   lName: '',
   age: 0,
   email: '',
-  gender: "unknown" as Gender
+  gender: "unknown" as Gender,
+  mainTable: {
+    saturday: [],
+    sunday: [],
+    monday: [],
+    tuesday: [],
+    wednesday: [],
+    thursday: [],
+    friday: [],
+    weekend: []
+  } as IdailyWork,
+  tempTable: null
 }
 
 interface IuserContextProps {
-  user: Iuser,
-  dispatch: ActionDispatch<[action: Iaction]>
+  userState: Iuser,
+  userDispatch: ActionDispatch<[action: Iaction]>
 }
 
-
 interface Iaction {
-  type: 'setIsAuth' | 'setFName' | 'setLName' | 'setAge' | 'setEmail' | 'setGender',
+  type: 'setIsAuth' | 'setFName' | 'setLName' | 'setAge' | 'setEmail' | 'setGender' | 'setMainTable' | 'setTempTable',
   value: any
 }
 
@@ -41,23 +41,32 @@ const reducer = (currentState: Iuser, action: Iaction): Iuser => {
     case 'setAge': return { ...currentState, age: action.value }
     case 'setEmail': return { ...currentState, email: action.value }
     case 'setGender': return { ...currentState, gender: action.value }
+    case 'setMainTable': return { ...currentState, mainTable: action.value }
+    case 'setTempTable': return { ...currentState, tempTable: action.value }
   }
 }
 
-const userContext = createContext<IuserContextProps>(initialState)
+const userContext = createContext<IuserContextProps>({
+  userState: initialState,
+  userDispatch: () => { }
+})
 
 const UserProvider = ({ children }: { children: ReactNode }) => {
-  const [user, dispatch] = useReducer(reducer, initialState)
+  const [userState, userDispatch] = useReducer(reducer, initialState)
+
+  useEffect(() => {
+    localStorage.setItem('user-data', JSON.stringify(userState));
+  }, [userState])
 
   return (
-    <userContext.Provider value={{ user, dispatch }}>
+    <userContext.Provider value={{ userState, userDispatch }}>
       {children}
     </userContext.Provider>
   )
 }
 
 export const useUser = () => {
-  const context = useContext(userContext);
+  const context = use(userContext);
   return context;
 }
 
