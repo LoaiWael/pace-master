@@ -2,7 +2,7 @@
 
 > **Master your time. Separate the fleeting from the foundational.**
 
-![Project Banner or Screenshot](https://github.com/LoaiWael/pace-master/public/imgs/banner.webp)
+![Project Banner](https://github.com/LoaiWael/pace-master/blob/main/public/imgs/banner.webp)
 ## 📖 About The Project
 
 PaceMaster is not just another to-do list; it is a comprehensive time management and productivity tool designed to help you understand *how* you work. 
