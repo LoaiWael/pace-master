@@ -38,3 +38,5 @@ export interface IdailyWork {
   friday: IdailyTask[]
   weekend: Days[]
 }
+
+export type TimeFormat = '12' | '24'
