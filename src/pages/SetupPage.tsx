@@ -5,7 +5,7 @@ import { useForm, type SubmitHandler } from "react-hook-form"
 import vector1 from '../assets/custom-vectors/startup-vector-1.svg'
 import vector2 from '../assets/custom-vectors/startup-vector-2.svg'
 import type { Days, IdailyWork } from "@/types";
-import { formatTimeAndDisplay } from "@/utils/System";
+import { formatTimeAndDisplay } from "@/lib/utils";
 
 const SetupPage = () => {
   const { systemState } = useSystem();
@@ -353,6 +353,7 @@ function SetupDailyWork({ setPageId }: { setPageId: React.Dispatch<React.SetStat
 
 function EditDailyWorkOverlay({ setEditDailyWorkOverlay }: { setEditDailyWorkOverlay: React.Dispatch<React.SetStateAction<boolean>> }) {
   const { userState, userDispatch } = useUser();
+  const { systemState } = useSystem();
 
   const mainTable = userState.mainTable;
   const weekend = userState.mainTable.weekend;
@@ -403,7 +404,7 @@ function EditDailyWorkOverlay({ setEditDailyWorkOverlay }: { setEditDailyWorkOve
                 <div key={task.id} className="task-item" id={task.id}>
                   <span className="task-title">{task.name}</span>
                   <div className="task-actions">
-                    <span className="task-time">{formatTimeAndDisplay(task)}</span>
+                    <span className="task-time">{formatTimeAndDisplay(task, systemState.timeFormat)}</span>
                     <button className="task-delete task-delete-js" title="Delete task" data-task-id="${task.id}" data-day="${targetDay}">
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"
