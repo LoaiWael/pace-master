@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
 @import "tailwindcss";
 @import "tw-animate-css";
 
@@ -42,6 +43,40 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+
+  /* Brand Colors */
+  --color-brand-main-white: hsl(var(--main-white));
+  --color-brand-black-text: hsl(var(--black-text));
+  --color-brand-blue-primary: hsl(var(--blue-primary));
+  --color-brand-blue-primary-hover: hsl(var(--blue-primary-hover));
+  --color-brand-blue-primary-2: hsl(var(--blue-primary-2));
+  --color-brand-blue-primary-3: hsl(var(--blue-primary-3));
+  --color-brand-blue-secondary: hsl(var(--blue-secondary));
+  --color-brand-blue-secondary-2: hsl(var(--blue-secondary-2));
+  --color-brand-blue-secondary-3: hsl(var(--blue-secondary-3));
+  --color-brand-blue-secondary-4: hsl(var(--blue-secondary-4));
+  --color-brand-green: hsl(var(--green));
+  --color-brand-green-darker: hsl(var(--green-darker));
+  --color-brand-green-2: hsl(var(--green-2));
+  --color-brand-green-3: hsl(var(--green-3));
+  --color-brand-compelement: hsl(var(--compelement));
+  --color-brand-warning: hsl(var(--warning));
+  --color-brand-warning-2: hsl(var(--warning-2));
+  --color-brand-stroke: hsl(var(--stroke));
+  --color-brand-white-secondary: hsl(var(--white-secondary));
+  --color-brand-white-secondary-2: hsl(var(--white-secondary-2));
+  --color-brand-white-secondary-3: hsl(var(--white-secondary-3));
+  --color-brand-white-secondary-4: hsl(var(--white-secondary-4));
+  --color-brand-white-secondary-5: hsl(var(--white-secondary-5));
+  --color-brand-shadow-1: hsl(var(--shadow-1));
+  --color-brand-shadow-2: hsl(var(--shadow-2));
+  --color-brand-backdrop: hsl(var(--backdrop));
+  --color-brand-black-90: hsl(var(--black-90));
+  --color-brand-black-80: hsl(var(--black-80));
+  --color-brand-blue-80: hsl(var(--blue-80));
+  --color-brand-blue-75: hsl(var(--blue-75));
+  --color-brand-blue-2-75: hsl(var(--blue-2-75));
+  --color-brand-blue-25: hsl(var(--blue-25));
 }
 
 :root {
@@ -77,6 +112,44 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+
+  /* Shared CSS Variables (Converted to HSL) */
+  --main-white: 0 0% 100%;
+  --black-text: 220 75% 3%;
+  --blue-primary: 218 79% 60%;
+  --blue-primary-hover: 221 83% 53%;
+  --blue-primary-2: 218 79% 75%;
+  --blue-primary-3: 218 69% 70%;
+  --blue-secondary: 220 33% 92%;
+  --blue-secondary-2: 216 33% 95%;
+  --blue-secondary-3: 220 25% 92%;
+  --blue-secondary-4: 218 79% 95%;
+  --green: 119 82% 60%;
+  --green-darker: 119 80% 40%;
+  --green-2: 118 86% 95%;
+  --green-3: 120 43% 97%;
+  --compelement: 41 81% 60%;
+  --warning: 1 81% 60%;
+  --warning-2: 2 86% 95%;
+  --stroke: 0 0% 80%;
+  --white-secondary: 0 0% 95%;
+  --white-secondary-2: 0 0% 90%;
+  --white-secondary-3: 0 0% 85%;
+  --white-secondary-5: 0 0% 50%;
+  --white-secondary-4: 0 0% 40%;
+
+  --shadow-1: 217 41% 10% / 0.1;
+  --shadow-2: 217 41% 10% / 0.25;
+  --backdrop: 217 41% 10% / 0.5;
+  --black-90: 220 75% 3% / 0.9;
+  --black-80: 220 75% 3% / 0.8;
+  --blue-80: 219 55% 88% / 0.8;
+  --blue-75: 219 55% 88% / 0.75;
+  --blue-2-75: 218 48% 90% / 0.75;
+  --blue-25: 219 55% 88% / 0.25;
+
+  scroll-behavior: smooth;
+  interpolate-size: allow-keywords;
 }
 
 .dark {
@@ -111,13 +184,109 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
+
+  /* Shared CSS Variables Dark Mode (Inverted Lightness) */
+  --main-white: 0 0% 0%;
+  --black-text: 220 75% 97%;
+  --blue-primary: 218 79% 40%;
+  --blue-primary-hover: 221 83% 47%;
+  --blue-primary-2: 218 79% 25%;
+  --blue-primary-3: 218 69% 30%;
+  --blue-secondary: 220 33% 8%;
+  --blue-secondary-2: 216 33% 5%;
+  --blue-secondary-3: 220 25% 8%;
+  --blue-secondary-4: 218 79% 5%;
+  --green: 119 82% 40%;
+  --green-darker: 119 80% 60%;
+  --green-2: 118 86% 5%;
+  --green-3: 120 43% 3%;
+  --compelement: 41 81% 40%;
+  --warning: 1 81% 40%;
+  --warning-2: 2 86% 5%;
+  --stroke: 0 0% 20%;
+  --white-secondary: 0 0% 5%;
+  --white-secondary-2: 0 0% 10%;
+  --white-secondary-3: 0 0% 15%;
+  --white-secondary-5: 0 0% 50%;
+  --white-secondary-4: 0 0% 60%;
+
+  --shadow-1: 217 41% 90% / 0.1;
+  --shadow-2: 217 41% 90% / 0.25;
+  --backdrop: 217 41% 90% / 0.5;
+  --black-90: 220 75% 97% / 0.9;
+  --black-80: 220 75% 97% / 0.8;
+  --blue-80: 219 55% 12% / 0.8;
+  --blue-75: 219 55% 12% / 0.75;
+  --blue-2-75: 218 48% 10% / 0.75;
+  --blue-25: 219 55% 12% / 0.25;
 }
 
 @layer base {
   * {
     @apply border-border outline-ring/50;
+    -webkit-tap-highlight-color: transparent;
   }
+
   body {
-    @apply bg-background text-foreground;
+    @apply bg-brand-blue-25 text-foreground h-dvh overflow-auto;
+    font-family: 'Roboto', Arial, sans-serif;
+    font-size: clamp(0.9375rem, 1rem, 1.125rem);
+  }
+
+  ::selection {
+    background-color: hsl(var(--blue-80));
+  }
+
+  button:disabled {
+    opacity: 0.3;
+    pointer-events: none;
+  }
+
+  p {
+    line-height: 1.5;
+  }
+
+  button {
+    font-family: 'Roboto', Arial, sans-serif;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .input-field {
+    padding: 0.5em 1em;
+    border-radius: 0.625em;
+    border: 1px solid hsl(var(--stroke));
+    background: hsl(var(--white-secondary));
+    color: hsl(var(--black-text));
+    outline: none;
+    box-shadow: 0 0 5px hsl(var(--shadow-1)) inset;
+    width: 20%;
+    min-width: 20ch;
+    transition: 0.1s;
+  }
+
+  .input-field:focus {
+    border: 2px solid hsl(var(--blue-primary-3));
+  }
+
+  .input-field-time {
+    position: relative;
+    padding: 0.25em 0.75em;
+    max-width: fit-content;
+  }
+}
+
+@layer utilities {
+  .scrollbar-hide {
+    /* Firefox */
+    scrollbar-width: none;
+    /* IE and Edge */
+    -ms-overflow-style: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    /* Chrome, Safari and Opera */
+    display: none;
   }
 }
